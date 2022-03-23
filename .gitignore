@@ -288,6 +288,11 @@ node_modules/
 # Visual Studio 6 build log
 *.plg
 
+# Data bases
+*.db
+*.db-shm
+*.db-wal
+
 # Visual Studio 6 workspace options file
 *.opt
 
