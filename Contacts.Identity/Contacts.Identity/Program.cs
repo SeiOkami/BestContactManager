@@ -37,6 +37,8 @@ builder.Services.AddIdentityServer()
     .AddInMemoryClients(Configuration.Clients)
     .AddDeveloperSigningCredential();
 
+builder.Services.AddControllersWithViews();
+
 builder.Services.ConfigureApplicationCookie(config =>
 {
     config.Cookie.Name = "Contacts.Identity.Cookie";
