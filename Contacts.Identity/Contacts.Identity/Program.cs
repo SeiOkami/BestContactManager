@@ -2,6 +2,7 @@ using System.IO;
 using System.Collections.Generic;
 using IdentityServer4;
 using IdentityServer4.Models;
+using IdentityServer4.Test;
 using IdentityModel;
 using Contacts.Identity;
 using Contacts.Identity.Data;
@@ -9,8 +10,7 @@ using Contacts.Identity.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Identity;
-
-
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +35,7 @@ builder.Services.AddIdentityServer()
     .AddInMemoryIdentityResources(Configuration.IdentityResources)
     .AddInMemoryApiScopes(Configuration.ApiScopes)
     .AddInMemoryClients(Configuration.Clients)
+    .AddTestUsers(Configuration.TestUsers)
     .AddDeveloperSigningCredential();
 
 builder.Services.AddControllersWithViews();
@@ -71,13 +72,15 @@ app.UseStaticFiles(new StaticFileOptions
                     Path.Combine(app.Environment.ContentRootPath, "Styles")),
     RequestPath = "/styles"
 });
-app.UseIdentityServer();
+
 app.UseRouting();
+app.UseIdentityServer();
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapDefaultControllerRoute();
 });
 
-//app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () => @"<a href='/Auth/Login'>login</a>");
 
 app.Run();

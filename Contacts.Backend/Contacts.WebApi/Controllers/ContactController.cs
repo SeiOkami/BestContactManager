@@ -23,6 +23,13 @@ namespace Contacts.WebApi.Controllers
 
         public ContactController(IMapper mapper) => _mapper = mapper;
 
+        [HttpGet("Test")]
+        [Authorize]
+        public async Task<ActionResult<String>> Test()
+        {
+            return Ok("DA");
+        }
+
         /// <summary>
         /// Gets the list of contacts
         /// </summary>

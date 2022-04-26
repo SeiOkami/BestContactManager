@@ -1,45 +1,50 @@
-using IdentityServer.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using IdentityServer.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var services = builder.Services;
+
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<IdentityServerContext>(options =>
-    options.UseSqlite(connectionString));
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//    options.UseSqlite(connectionString));
-
-//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-//                .AddEntityFrameworkStores<ApplicationDbContext>();
-
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//    options.UseSqlServer(connectionString));
-
+builder.Services.AddDbContext<ApplicationContext>(options =>
+    options.UseSqlite(connectionString));builder.Services.AddDbContext<ApplicationContext>(options =>
+    options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+//builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+//    .AddEntityFrameworkStores<ApplicationContext>();
 builder.Services.AddControllersWithViews();
 
-var app = builder.Build();
+builder.Services.AddRazorPages();
+
+//services.Configure<IdentityOptions>(builder.Configuration.GetSection(nameof(IdentityOptions)));
 
 
-//using (var scope = app.Services.CreateScope())
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+    options.Password.RequiredLength = 4;
+    options.Password.RequireDigit = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+}).AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders().AddDefaultUI();
+
+//services.AddApiAuthorization<User, ApplicationContext>();
+
+services.Configure<IdentityOptions>(builder.Configuration.GetSection(nameof(IdentityOptions)));
+
+
+//builder.Services.Configure<IdentityOptions>(options =>
 //{
-//    var serviceProvider = scope.ServiceProvider;
-//    try
-//    {
-//        var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
-//        ApplicationDbContext.Initialize(context);
-//    }
-//    catch (Exception ex)
-//    {
-//        var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
-//        logger.LogError(ex, "An error occurred while app initialization");
-//    }
-//}
+//    options.Password.RequiredLength = 4;
+//    options.Password.RequireDigit = false;
+//    options.Password.RequireNonAlphanumeric = false;
+//    options.Password.RequireUppercase = false;
+//});
+
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

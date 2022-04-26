@@ -1,14 +1,16 @@
+using Contacts.WebClient.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
+var Configuration = builder.Configuration;
 
 // Add services to the container.
 services.AddControllersWithViews();
 
-JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+//JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
 services.AddAuthentication(options =>
 {
@@ -18,17 +20,21 @@ services.AddAuthentication(options =>
     .AddCookie("Cookies")
     .AddOpenIdConnect("oidc", options =>
     {
-        options.Authority = "http://localhost:5000";
-        options.RequireHttpsMetadata = false;
 
-        options.ClientId = "mvc";
-        options.ClientSecret = "secret";
+        options.Authority = Configuration["InteractiveServiceSettings:AuthorityUrl"];
+        options.ClientId = Configuration["InteractiveServiceSettings:ClientId"];
+        options.ClientSecret = Configuration["InteractiveServiceSettings:ClientSecret"];
+
         options.ResponseType = "code";
+        options.UsePkce = true;
+        options.ResponseMode = "query";
 
+        options.Scope.Add(Configuration["InteractiveServiceSettings:Scopes:0"]);
         options.SaveTokens = true;
     });
 
-
+services.Configure<IdentityServerSettings>(Configuration.GetSection("IdentityServerSettings"));
+services.AddSingleton<ITokenService, TokenService>();
 //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 //.AddCookie();
 
@@ -45,11 +51,9 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
