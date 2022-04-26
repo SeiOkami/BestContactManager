@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using IdentityModel.Client;
 using Contacts.WebClient.Services;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Contacts.WebClient.Controllers
 {
@@ -28,6 +29,7 @@ namespace Contacts.WebClient.Controllers
         }
 
         [HttpGet("Test")]
+        [Authorize]
         public async Task<ActionResult<String>> Test()
         {
             using (var client = new HttpClient())

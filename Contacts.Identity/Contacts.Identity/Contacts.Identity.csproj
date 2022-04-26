@@ -23,4 +23,10 @@
     <Folder Include="Database\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Views\Auth\Login.cshtml" />
+    <None Include="Views\Auth\Register.cshtml" />
+    <None Include="Views\_ViewImports.cshtml" />
+  </ItemGroup>
+
 </Project>

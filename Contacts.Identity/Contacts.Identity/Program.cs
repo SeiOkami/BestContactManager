@@ -40,12 +40,12 @@ builder.Services.AddIdentityServer()
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.ConfigureApplicationCookie(config =>
-{
-    config.Cookie.Name = "Contacts.Identity.Cookie";
-    config.LoginPath = "/Auth/Login";
-    config.LogoutPath = "/Auth/Logout";
-});
+//builder.Services.ConfigureApplicationCookie(config =>
+//{
+//    config.Cookie.Name = "Contacts.Identity.Cookie";
+//    config.LoginPath = "/Auth/Login";
+//    config.LogoutPath = "/Auth/Logout";
+//});
 
 builder.Services.AddControllersWithViews();
 
@@ -66,21 +66,30 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-                    Path.Combine(app.Environment.ContentRootPath, "Styles")),
-    RequestPath = "/styles"
-});
-
+//app.UseStaticFiles(new StaticFileOptions
+//{
+//    FileProvider = new PhysicalFileProvider(
+//                    Path.Combine(app.Environment.ContentRootPath, "Styles")),
+//    RequestPath = "/styles"
+//});
+app.UseStaticFiles();
 app.UseRouting();
 app.UseIdentityServer();
+app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapDefaultControllerRoute();
-});
+app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
 
-app.MapGet("/", () => @"<a href='/Auth/Login'>login</a>");
+
+//app.UseCsp(csp =>
+//{
+//    csp.AllowScripts
+//            .FromSelf()
+//            .From("ajax.aspnetcdn.com");
+//    csp.AllowStyles
+//            .FromSelf()
+//            .From("ajax.aspnetcdn.com");
+//});
+
+//app.MapGet("/", () => @"<a href='/Auth/Login'>login</a>");
 
 app.Run();

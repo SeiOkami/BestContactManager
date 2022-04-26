@@ -10,8 +10,6 @@ var Configuration = builder.Configuration;
 // Add services to the container.
 services.AddControllersWithViews();
 
-//JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
-
 services.AddAuthentication(options =>
 {
     options.DefaultScheme = "Cookies";
