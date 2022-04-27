@@ -1,0 +1,36 @@
+ 0.
+
+ Добавили миграции
+ 
+	dotnet ef migrations add InitialIdentityServerMigration -c PersistedGrantDbContext
+
+	dotnet ef migrations add InitialIdentityServerMigration -c ConfigurationDbContext
+
+Создали базу
+
+	dotnet ef database update -c PersistedGrantDbContext
+
+	dotnet ef database update -c ConfigurationDbContext
+
+
+Запустили заполнение (заполнятся данные)
+	dotnet run
+
+Создаем новую миграцию 
+
+	dotnet ef migrations add InitialIdentityServerMigration -c AuthDbContext
+
+	dotnet ef database update -c PersistedGrantDbContext
+
+
+ 1. Грохнуть базу
+
+ 2. Грохнуть косячную миграцию
+ dotnet ef migrations remove -c AuthDbContext
+
+ 3. Применить миграции для создания базы 
+
+ 4. 
+
+ dotnet ef migrations add InitialIdentityServerMigration -c AuthDbContext
+

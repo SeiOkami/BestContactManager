@@ -6,5 +6,8 @@ namespace Contacts.Identity.Models
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+
+        //public AppUser(string Guid) : base(Guid);
+
     }
 }

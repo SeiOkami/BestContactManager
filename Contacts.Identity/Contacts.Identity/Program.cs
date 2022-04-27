@@ -4,6 +4,10 @@ using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
 using IdentityModel;
+using System.Reflection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Contacts.Identity;
 using Contacts.Identity.Data;
 using Contacts.Identity.Models;
@@ -11,14 +15,23 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.SystemConsole.Themes;
+using IdentityServer4.EntityFramework.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 var connectionString = builder.Configuration.GetValue<string>("DbConnection");
+var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
 
 builder.Services.AddDbContext<AuthDbContext>(options =>
 {
-    options.UseSqlite(connectionString);
+    options.UseSqlite(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly));
 });
 
 builder.Services.AddIdentity<AppUser, IdentityRole>(config =>
@@ -29,67 +42,49 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(config =>
     config.Password.RequireUppercase = false;
 }).AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
 
+
 builder.Services.AddIdentityServer()
     .AddAspNetIdentity<AppUser>()
-    .AddInMemoryApiResources(Configuration.ApiResources)
-    .AddInMemoryIdentityResources(Configuration.IdentityResources)
-    .AddInMemoryApiScopes(Configuration.ApiScopes)
-    .AddInMemoryClients(Configuration.Clients)
-    .AddTestUsers(Configuration.TestUsers)
+    .AddConfigurationStore(options =>
+    {
+        options.ConfigureDbContext = builder => builder.UseSqlite(connectionString,
+           opt => opt.MigrationsAssembly(migrationsAssembly));
+    })
+    .AddOperationalStore(options =>
+    {
+        options.ConfigureDbContext = builder => builder.UseSqlite(connectionString,
+            opt => opt.MigrationsAssembly(migrationsAssembly));
+
+        options.EnableTokenCleanup = true;
+    })
     .AddDeveloperSigningCredential();
 
 builder.Services.AddControllersWithViews();
 
-//builder.Services.ConfigureApplicationCookie(config =>
-//{
-//    config.Cookie.Name = "Contacts.Identity.Cookie";
-//    config.LoginPath = "/Auth/Login";
-//    config.LogoutPath = "/Auth/Logout";
-//});
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var serviceProvider = scope.ServiceProvider;
-    try
-    {
-        var context = serviceProvider.GetRequiredService<AuthDbContext>();
-        DbInitializer.Initialize(context);
-    }
-    catch (Exception ex)
-    {
-        var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while app initialization");
-    }
-}
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+    .MinimumLevel.Override("System", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
+    .Enrich.FromLogContext()
+    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
+    .CreateLogger();
 
-//app.UseStaticFiles(new StaticFileOptions
-//{
-//    FileProvider = new PhysicalFileProvider(
-//                    Path.Combine(app.Environment.ContentRootPath, "Styles")),
-//    RequestPath = "/styles"
-//});
+Log.Information("Starting host...");
+
+DbInitializer.Initialize(app.Services);
+
 app.UseStaticFiles();
 app.UseRouting();
 app.UseIdentityServer();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
-
-
-//app.UseCsp(csp =>
-//{
-//    csp.AllowScripts
-//            .FromSelf()
-//            .From("ajax.aspnetcdn.com");
-//    csp.AllowStyles
-//            .FromSelf()
-//            .From("ajax.aspnetcdn.com");
-//});
-
-//app.MapGet("/", () => @"<a href='/Auth/Login'>login</a>");
 
 app.Run();
