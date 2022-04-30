@@ -1,5 +1,5 @@
 @using Contacts.Identity.ViewModels.Account
-@model LoginViewModel
+@model RegisterViewModel
 
 <div class="login-page">
     <div class="lead">
@@ -24,12 +24,20 @@
                             <input type="hidden" asp-for="ReturnUrl" />
 
                             <div class="form-group">
-                                <label asp-for="Username"></label>
-                                <input class="form-control" placeholder="Username" asp-for="Username" autofocus>
+                                <label asp-for="UserName"></label>
+                                <input class="form-control" placeholder="UserName" asp-for="UserName" autofocus>
                             </div>
                             <div class="form-group">
                                 <label asp-for="Password"></label>
                                 <input type="password" class="form-control" placeholder="Password" asp-for="Password" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ConfirmPassword"></label>
+                                <input type="password" class="form-control" placeholder="ConfirmPassword" asp-for="ConfirmPassword" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Email"></label>
+                                <input type="email" class="form-control" placeholder="Email" asp-for="Email" autocomplete="off">
                             </div>
                             @if (Model.AllowRememberLogin)
                             {
@@ -42,8 +50,7 @@
                                     </div>
                                 </div>
                             }
-                            <button class="btn btn-primary" name="button" value="login">Login</button>
-                            <a asp-action="Register" class="btn btn-secondary" asp-route-returnUrl=@Model.ReturnUrl>Register</a>
+                            <button class="btn btn-primary" name="button" value="register">Register</button>
                             <button class="btn btn-secondary" name="button" value="cancel">Cancel</button>
                         </form>
                     </div>

@@ -28,11 +28,12 @@
 
   <ItemGroup>
     <Folder Include="Database\" />
+    <Folder Include="Quickstart\Account\" />
+    <Folder Include="Quickstart\Consent\" />
+    <Folder Include="Quickstart\Device\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\Auth\Login.cshtml" />
-    <None Include="Views\Auth\Register.cshtml" />
     <None Include="Views\_ViewImports.cshtml" />
   </ItemGroup>
 
