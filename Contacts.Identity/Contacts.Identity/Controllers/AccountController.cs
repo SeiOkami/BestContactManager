@@ -133,7 +133,7 @@ namespace Contacts.Identity.Controllers
 
                     // only set explicit expiration here if user chooses "remember me". 
                     // otherwise we rely upon expiration configured in cookie middleware.
-                    AuthenticationProperties props = null;
+                    AuthenticationProperties? props = null;
                     if (AccountOptions.AllowRememberLogin && model.RememberLogin)
                     {
                         props = new AuthenticationProperties
@@ -219,7 +219,7 @@ namespace Contacts.Identity.Controllers
             // build a model so the logged out page knows what to display
             var vm = await BuildLoggedOutViewModelAsync(model.LogoutId);
 
-            if (User?.Identity.IsAuthenticated == true)
+            if (User?.Identity?.IsAuthenticated == true)
             {
                 // delete local authentication cookie
                 await HttpContext.SignOutAsync();
@@ -238,10 +238,10 @@ namespace Contacts.Identity.Controllers
                 // build a return URL so the upstream provider will redirect back
                 // to us after the user has logged out. this allows us to then
                 // complete our single sign-out processing.
-                string url = Url.Action("Logout", new { logoutId = vm.LogoutId });
+                string url = Url.Action("Logout", new { logoutId = vm.LogoutId }) ?? String.Empty;
 
                 // this triggers a redirect to the external provider for sign-out
-                return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme);
+                return SignOut(new AuthenticationProperties { RedirectUri = url }, vm.ExternalAuthenticationScheme ?? String.Empty);
             }
 
             return View("LoggedOut", vm);
@@ -257,7 +257,7 @@ namespace Contacts.Identity.Controllers
 
 
         /// <summary>
-        /// Entry point into the login workflow
+        /// Entry point into the register workflow
         /// </summary>
         [HttpGet]
         [AllowAnonymous]
@@ -276,7 +276,7 @@ namespace Contacts.Identity.Controllers
         }
 
         /// <summary>
-        /// Handle postback from username/password login
+        /// Handle postback from username/password register
         /// </summary>
         [HttpPost]
         [AllowAnonymous]
@@ -339,7 +339,7 @@ namespace Contacts.Identity.Controllers
 
                     // only set explicit expiration here if user chooses "remember me". 
                     // otherwise we rely upon expiration configured in cookie middleware.
-                    AuthenticationProperties props = null;
+                    AuthenticationProperties? props = null;
                     if (AccountOptions.AllowRememberLogin && model.RememberLogin)
                     {
                         props = new AuthenticationProperties
@@ -384,10 +384,7 @@ namespace Contacts.Identity.Controllers
                         // user might have clicked on a malicious link - should be logged
                         throw new Exception("invalid return URL");
                     }
-               // }
-
-                await _events.RaiseAsync(new UserLoginFailureEvent(model.UserName, "invalid credentials", clientId: context?.Client.ClientId));
-                ModelState.AddModelError(string.Empty, AccountOptions.InvalidCredentialsErrorMessage);
+               
             }
 
             // something went wrong, show form with error
@@ -414,12 +411,12 @@ namespace Contacts.Identity.Controllers
                 {
                     EnableLocalLogin = local,
                     ReturnUrl = returnUrl,
-                    Username = context?.LoginHint,
+                    Username = context?.LoginHint ?? String.Empty,
                 };
 
                 if (!local)
                 {
-                    vm.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context.IdP } };
+                    vm.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context?.IdP } };
                 }
 
                 return vm;
@@ -455,7 +452,7 @@ namespace Contacts.Identity.Controllers
                 AllowRememberLogin = AccountOptions.AllowRememberLogin,
                 EnableLocalLogin = allowLocal && AccountOptions.AllowLocalLogin,
                 ReturnUrl = returnUrl,
-                Username = context?.LoginHint,
+                Username = context?.LoginHint ?? String.Empty,
                 ExternalProviders = providers.ToArray()
             };
         }
@@ -472,7 +469,7 @@ namespace Contacts.Identity.Controllers
         {
             var vm = new LogoutViewModel { LogoutId = logoutId, ShowLogoutPrompt = AccountOptions.ShowLogoutPrompt };
 
-            if (User?.Identity.IsAuthenticated != true)
+            if (User?.Identity?.IsAuthenticated != true)
             {
                 // if the user is not authenticated, then just show logged out page
                 vm.ShowLogoutPrompt = false;
@@ -506,7 +503,7 @@ namespace Contacts.Identity.Controllers
                 LogoutId = logoutId
             };
 
-            if (User?.Identity.IsAuthenticated == true)
+            if (User?.Identity?.IsAuthenticated == true)
             {
                 var idp = User.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
                 if (idp != null && idp != IdentityServer4.IdentityServerConstants.LocalIdentityProvider)
@@ -542,12 +539,12 @@ namespace Contacts.Identity.Controllers
                 {
                     EnableLocalLogin = local,
                     ReturnUrl = returnUrl,
-                    UserName = context?.LoginHint,
+                    UserName = context?.LoginHint ?? String.Empty,
                 };
 
                 if (!local)
                 {
-                    vm.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context.IdP } };
+                    vm.ExternalProviders = new[] { new ExternalProvider { AuthenticationScheme = context?.IdP } };
                 }
 
                 return vm;
@@ -583,7 +580,7 @@ namespace Contacts.Identity.Controllers
                 AllowRememberLogin = AccountOptions.AllowRememberLogin,
                 EnableLocalLogin = allowLocal && AccountOptions.AllowLocalLogin,
                 ReturnUrl = returnUrl,
-                UserName = context?.LoginHint,
+                UserName = context?.LoginHint ?? String.Empty,
                 ExternalProviders = providers.ToArray()
             };
         }

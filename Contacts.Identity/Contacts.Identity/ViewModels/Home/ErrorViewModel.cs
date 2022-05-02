@@ -17,6 +17,6 @@ namespace Contacts.Identity.ViewModels.Home
             Error = new ErrorMessage { Error = error };
         }
 
-        public ErrorMessage Error { get; set; }
+        public ErrorMessage? Error { get; set; }
     }
 }

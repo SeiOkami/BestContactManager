@@ -74,12 +74,13 @@ namespace Contacts.Identity.Controllers
                     // The client is native, so this change in how to
                     // return the response is for better UX for the end user.
                     return this.LoadingPage("Redirect", result.RedirectUri);
+                } else
+                {
+                    return Redirect(result.RedirectUri);
                 }
-
-                return Redirect(result.RedirectUri);
             }
 
-            if (result.HasValidationError)
+            if (result.HasValidationError && result.ValidationError != null)
             {
                 ModelState.AddModelError(string.Empty, result.ValidationError);
             }
@@ -103,7 +104,7 @@ namespace Contacts.Identity.Controllers
             var request = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
             if (request == null) return result;
 
-            ConsentResponse grantedConsent = null;
+            ConsentResponse? grantedConsent = null;
 
             // user clicked 'no' - send back the standard 'access_denied' response
             if (model?.Button == "no")
@@ -151,10 +152,10 @@ namespace Contacts.Identity.Controllers
                 await _interaction.GrantConsentAsync(request, grantedConsent);
 
                 // indicate that's it ok to redirect back to authorization endpoint
-                result.RedirectUri = model.ReturnUrl;
+                result.RedirectUri = model?.ReturnUrl ?? String.Empty;
                 result.Client = request.Client;
             }
-            else
+            else if (model?.ReturnUrl != null)
             {
                 // we need to redisplay the consent UI
                 result.ViewModel = await BuildViewModelAsync(model.ReturnUrl, model);
@@ -163,7 +164,7 @@ namespace Contacts.Identity.Controllers
             return result;
         }
 
-        private async Task<ConsentViewModel> BuildViewModelAsync(string returnUrl, ConsentInputModel model = null)
+        private async Task<ConsentViewModel?> BuildViewModelAsync(string returnUrl, ConsentInputModel? model = null)
         {
             var request = await _interaction.GetAuthorizationContextAsync(returnUrl);
             if (request != null)
@@ -172,21 +173,21 @@ namespace Contacts.Identity.Controllers
             }
             else
             {
-                _logger.LogError("No consent request matching request: {0}", returnUrl);
+                _logger.LogError("No consent request matching request: {returnUrl}", returnUrl);
             }
 
             return null;
         }
 
         private ConsentViewModel CreateConsentViewModel(
-            ConsentInputModel model, string returnUrl,
+            ConsentInputModel? model, string returnUrl,
             AuthorizationRequest request)
         {
             var vm = new ConsentViewModel
             {
                 RememberConsent = model?.RememberConsent ?? true,
                 ScopesConsented = model?.ScopesConsented ?? Enumerable.Empty<string>(),
-                Description = model?.Description,
+                Description = model?.Description ?? String.Empty,
 
                 ReturnUrl = returnUrl,
 
@@ -217,7 +218,7 @@ namespace Contacts.Identity.Controllers
             return vm;
         }
 
-        private ScopeViewModel CreateScopeViewModel(IdentityResource identity, bool check)
+        private static ScopeViewModel CreateScopeViewModel(IdentityResource identity, bool check)
         {
             return new ScopeViewModel
             {
@@ -249,7 +250,7 @@ namespace Contacts.Identity.Controllers
             };
         }
 
-        private ScopeViewModel GetOfflineAccessScope(bool check)
+        private static ScopeViewModel GetOfflineAccessScope(bool check)
         {
             return new ScopeViewModel
             {

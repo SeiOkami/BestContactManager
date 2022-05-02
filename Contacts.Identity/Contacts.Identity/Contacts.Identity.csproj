@@ -34,12 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Quickstart\Account\" />
-    <Folder Include="Quickstart\Consent\" />
-    <Folder Include="Quickstart\Device\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Views\_ViewImports.cshtml" />
   </ItemGroup>
 

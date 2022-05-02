@@ -18,19 +18,27 @@ namespace Contacts.Identity.Data
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            if (scope == null)
+                throw new Exception(nameof(scope));
+
+            var serviseScope = scope.ServiceProvider;
+            serviseScope.GetService<PersistedGrantDbContext>()?.Database.Migrate();
+
+            var context = serviseScope.GetService<ConfigurationDbContext>();
+
+            if (context == null)
             {
-                scope.ServiceProvider.GetService<PersistedGrantDbContext>().Database.Migrate();
-
-                var context = scope.ServiceProvider.GetService<ConfigurationDbContext>();
-                context.Database.Migrate();
-
-                EnsureSeedData(context);
-
-                var ctx = scope.ServiceProvider.GetService<AuthDbContext>();
-                ctx.Database.Migrate();
-                EnsureUsers(scope);
+                throw new Exception(nameof(context));
             }
+            else
+            {
+                context.Database.Migrate();
+                EnsureSeedData(context);
+            }
+
+            serviseScope.GetService<AuthDbContext>()?.Database.Migrate();
+            EnsureUsers(scope);
         }
 
 
