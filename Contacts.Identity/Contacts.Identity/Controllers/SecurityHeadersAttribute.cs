@@ -22,14 +22,14 @@ namespace Contacts.Identity.Controllers
             // also an example if you need client images to be displayed from twitter
             // csp += "img-src 'self' https://pbs.twimg.com;";
 
-            var csp = "default-src 'self'; object-src 'none'; frame-ancestors 'none'; sandbox allow-forms allow-same-origin allow-scripts; base-uri 'self';";
+            //var csp = "default-src 'self'; object-src 'none'; frame-ancestors 'none'; sandbox allow-forms allow-same-origin allow-scripts; base-uri 'self';";
             
             var values = new Dictionary<string, string>()
             {
                 {"X-Content-Type-Options", "nosniff" }, // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
                 {"X-Frame-Options", "SAMEORIGIN" },     // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
-                {"Content-Security-Policy",  csp},      // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
-                {"X-Content-Security-Policy", csp},     // and once again for IE
+                //{"Content-Security-Policy",  csp},      // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
+                //{"X-Content-Security-Policy", csp},     // and once again for IE
                 {"Referrer-Policy", "no-referrer"}      // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
             };
 

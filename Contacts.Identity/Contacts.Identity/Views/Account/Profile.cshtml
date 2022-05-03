@@ -1,0 +1,98 @@
+@using Contacts.Identity.ViewModels.Account
+@model ProfileViewModel
+
+<div class="login-page">
+    <div class="row">
+
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header">
+                    <h1>Profile info</h1>
+                </div>
+
+                <div class="card-body">
+                    <form id="profile-form" asp-route="Profile">
+                            <div class="form-group">
+                                <label asp-for="UserName"></label>
+                                <input class="form-control user-field" placeholder="UserName" asp-for="UserName" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Email"></label>
+                                <input type="email" class="form-control user-field" placeholder="Email" asp-for="Email" autocomplete="off">
+                            </div>
+
+                            @if (!Model.ReadOnly)
+                            {
+                                <button id="edit-button" type="button" class="btn btn-second" onclick="toggleEditMode();">Edit</button>
+                                <button id="save-button" class="btn btn-primary">Save</button>
+
+                                <script>
+
+                                    var editMode = false;
+                                    
+                                    updateEditMode();
+
+                                    function toggleEditMode(){
+                                        editMode = !editMode;
+                                        updateEditMode();
+                                    }
+
+                                    function updateEditMode(){
+                                        updateFieldsEditing();
+                                        updateEditButton();
+                                        updateSaveButton();
+                                    }
+
+                                    function updateFieldsEditing(){
+
+                                        var elements = document.getElementsByClassName("user-field");
+                                        for (var i = 0; i < elements.length; i++){
+                                            var element = elements[i]
+                                            element.disabled = !editMode;
+                                        }
+
+                                    }
+
+                                    function updateEditButton(){
+
+                                        var element = doc_getElementById("edit-button");
+                                        if (element != null) {
+                                            changeDisplay(element, !editMode);
+                                        }
+
+                                    }
+                                    
+                                    function updateSaveButton(){
+
+                                        var element = doc_getElementById("save-button");
+                                        if (element != null) {
+                                            changeDisplay(element, editMode);
+                                        }
+
+                                    }
+
+                                    function changeDisplay(element, display){
+                                        element.style.display = display ? "block" : "none";
+                                    }
+
+                                    function doc_getElementById(idElement){
+                                        var elem = document.getElementById(idElement);
+                                        if (elem == null){
+                                            console.log('Not found element by ID {idElement}');
+                                        } else {
+                                            return elem;
+                                        }
+                                    }
+
+                                </script>
+
+
+                            }
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

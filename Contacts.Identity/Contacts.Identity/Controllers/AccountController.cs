@@ -254,6 +254,34 @@ namespace Contacts.Identity.Controllers
         }
 
 
+        /// <summary>
+        /// Account info
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> Profile(string userName)
+        {
+            var thisUserName = User?.Identity?.Name ?? String.Empty;
+
+            if (string.IsNullOrEmpty(userName))
+                userName = thisUserName;
+
+            if (string.IsNullOrEmpty(userName))
+                return View("Username not passed!");
+
+            var user = await _signInManager.UserManager.FindByNameAsync(userName);
+            if (user == null)
+                return View("User not found!");
+
+            var vm = new ProfileViewModel()
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                ReadOnly = (user.UserName != thisUserName)
+            };
+            
+            return View(vm);
+
+        }
 
 
         /// <summary>
@@ -592,7 +620,6 @@ namespace Contacts.Identity.Controllers
             vm.RememberLogin = model.RememberLogin;
             return vm;
         }
-
 
     }
 }
