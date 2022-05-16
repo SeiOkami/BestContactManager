@@ -1,4 +1,9 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿
+//Заставляет C# отключать обязательность not nullable свойства
+//var notRequiredElements = document.getElementsByClassName('not-required');
+//for (var i = 0; i < notRequiredElements.length; i++) {
+//    var element = notRequiredElements[i];
+//    element.removeAttribute("data-val-required");
+//    element.removeAttribute("required");
+//}
 
-// Write your JavaScript code.

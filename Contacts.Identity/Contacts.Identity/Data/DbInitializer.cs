@@ -53,6 +53,7 @@ namespace Contacts.Identity.Data
                     UserName = "alice",
                     Email = "AliceSmith@email.com",
                     EmailConfirmed = true,
+                    Id = "20480835-FAA6-4495-8A7C-29E7CE175888",
                 };
                 var result = userMgr.CreateAsync(alice, "Pass123$").Result;
                 if (!result.Succeeded)

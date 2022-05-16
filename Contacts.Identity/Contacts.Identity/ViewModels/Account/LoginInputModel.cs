@@ -9,6 +9,7 @@ namespace Contacts.Identity.ViewModels.Account
     public class LoginInputModel
     {
         [Required]
+        [Display(Name = "Login")]
         public string Username { get; set; } = string.Empty;
         [Required]
         public string Password { get; set; } = string.Empty;

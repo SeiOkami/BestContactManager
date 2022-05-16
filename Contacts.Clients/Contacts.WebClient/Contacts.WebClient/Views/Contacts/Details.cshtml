@@ -1,0 +1,18 @@
+﻿@model Contacts.WebClient.Models.ContactModel
+
+@{
+    ViewData["Title"] = "Details info about contact";
+}
+
+<h1>DetailsView</h1>
+
+<div>
+    <h4>ContactViewModel</h4>
+    <hr/>
+    @await Html.PartialAsync("_ContactDetails", Model)
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new {  Id = Model.Id }) |
+    @Html.ActionLink("Delete", "Delete", new { Id = Model.Id }) |
+    <a asp-action="Index">Back to List</a>
+</div>

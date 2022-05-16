@@ -16,3 +16,32 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.menu-panel {
+    margin: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+    .menu-panel a, button {
+        display: inline-block;
+        color: white;
+        background: #0d6efd;
+        font-weight: 700;
+        text-decoration: none;
+        user-select: none;
+        padding: 0.3em 2em;
+        outline: none;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        transition: 0.2s;
+    }
+
+        .menu-panel a:hover, button:hover {
+            background: blue;
+        }
+
+        .menu-panel a:active, button:active {
+            background: white;
+            color: blue;
+        }

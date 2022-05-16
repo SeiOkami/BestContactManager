@@ -62,7 +62,7 @@ builder.Services.AddIdentityServer()
 builder.Services.AddControllersWithViews();
 
 
-builder.Services.AddControllersWithViews();
+//builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 

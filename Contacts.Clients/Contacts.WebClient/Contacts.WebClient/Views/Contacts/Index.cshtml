@@ -1,0 +1,79 @@
+﻿
+@model Contacts.WebClient.Models.ContactsModel
+
+@{
+    var title = "Contact list";
+    ViewData["Title"] = title;
+    ContactModel contactView = new();
+}
+
+<h1 class="display-4">@title</h1>
+
+<div class="menu-panel">
+    <div class="text-left">
+        <a asp-action="Create">Add</a>
+        <a asp-action="Export">Export</a>
+        <a asp-action="Import">Import</a>
+    </div>
+    <div class="text-right">
+        <a asp-action="Index">Update</a>
+        <a asp-action="Generate">Generate</a>
+        <a asp-action="Clear">Clear</a>
+        
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => contactView.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => contactView.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => contactView.MiddleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => contactView.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => contactView.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => contactView.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Contacts) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MiddleName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {  Id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { Id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { Id = item.Id }, new {@class = "delete"})
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -28,11 +28,29 @@ namespace Contacts.Identity
         public static IEnumerable<ApiResource> ApiResources =>
             new List<ApiResource>
             {
-                new ApiResource("ContactsWebAPI", "Web API", new []
-                    { JwtClaimTypes.Name})
+                new ApiResource("ContactsWebAPI", "Web API"
+                    , new [] { JwtClaimTypes.Name, JwtClaimTypes.Subject, 
+                        JwtClaimTypes.Role, JwtClaimTypes.Id, 
+                        JwtClaimTypes.Email, JwtClaimTypes.JwtId}
+                    )
                 {
-                    Scopes = { "ContactsWebAPI", "ContactsWebClient" },
-                    ApiSecrets = new List<Secret> {new Secret("ScopeSecret".Sha256())}
+                    Scopes = { "ContactsWebAPI", "ContactsWebClient" }//,
+                    //ApiSecrets = new List<Secret> {new Secret("ScopeSecret".Sha256())},
+                    //UserClaims =
+                    //{
+                    //    JwtClaimTypes.Name,
+                    //    JwtClaimTypes.Subject,
+                    //    JwtClaimTypes.Role,
+                    //}
+                },
+                new ApiResource("ContactsWebClient", "Web client"
+                    , new [] { JwtClaimTypes.Name, JwtClaimTypes.Subject,
+                        JwtClaimTypes.Role, JwtClaimTypes.Id,
+                        JwtClaimTypes.Email, JwtClaimTypes.JwtId}
+                    )
+                {
+                    Scopes = { "ContactsWebAPI", "ContactsWebClient" }//,
+                    //ApiSecrets = new List<Secret> {new Secret("ScopeSecret".Sha256())},
                 }
             };
 

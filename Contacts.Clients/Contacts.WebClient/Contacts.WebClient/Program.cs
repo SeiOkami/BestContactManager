@@ -32,7 +32,11 @@ services.AddAuthentication(options =>
     });
 
 services.Configure<IdentityServerSettings>(Configuration.GetSection("IdentityServerSettings"));
+
 services.AddSingleton<ITokenService, TokenService>();
+services.AddSingleton<IWebAPIService, WebAPIService>();
+services.Configure<WebAPIServiceSettings>(Configuration.GetSection("SettingsWebAPI"));
+
 //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 //.AddCookie();
 
@@ -56,6 +60,8 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    //pattern: "{controller=Home}/{action=Test}/{id?}"
+    pattern: "{controller=Contacts}/{action=Index}/{id?}"
+    );
 
 app.Run();

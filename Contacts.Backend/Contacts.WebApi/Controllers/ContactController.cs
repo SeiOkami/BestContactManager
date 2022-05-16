@@ -127,7 +127,7 @@ namespace Contacts.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Update([FromBody] UpdateContactDto updateContactDto)
         {
-            var command = _mapper.Map<CreateContactCommand>(updateContactDto);
+            var command = _mapper.Map<UpdateContactCommand>(updateContactDto);
             command.UserId = UserId;
             await Mediator.Send(command);
             return NoContent();
@@ -158,6 +158,34 @@ namespace Contacts.WebApi.Controllers
             await Mediator.Send(command);
             return NoContent();
         }
+
+
+        /// <summary>
+        /// Deletes the contact by id
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// DELETE /contact/88DEB432-062F-43DE-8DCD-8B6EF79073D3
+        /// </remarks>
+        /// <param name="id">Id of the contact (guid)</param>
+        /// <returns>Returns NoContent</returns>
+        /// <response code="204">Success</response>
+        /// <response code="401">If the user is unauthorized</response>
+        //[HttpDelete("clear")]
+        //[Authorize]
+        //[ProducesResponseType(StatusCodes.Status204NoContent)]
+        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //public async Task<IActionResult> Clear()
+        //{
+            //var command = new DeleteContactCommand
+            //{
+            //    Id = id,
+            //    UserId = UserId
+            //};
+            //await Mediator.Send(command);
+            //return NoContent();
+        //}
+
 
     }
 }

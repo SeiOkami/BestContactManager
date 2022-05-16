@@ -10,11 +10,31 @@ namespace Contacts.WebApi.Models
         [Required]
         public string FirstName { get; set; }
 
+        public string? LastName { get; set; } = "";
+        
+        public string? MiddleName { get; set; } = "";
+
+        public string? Phone { get; set; } = "";
+
+        public string? Email { get; set; } = "";
+
+        public string? Description { get; set; } = "";
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<CreateContactDto, CreateContactCommand>()
                 .ForMember(noteCommand => noteCommand.FirstName,
-                    opt => opt.MapFrom(noteDto => noteDto.FirstName));
+                    opt => opt.MapFrom(noteDto => noteDto.FirstName))
+                .ForMember(noteCommand => noteCommand.LastName,
+                    opt => opt.MapFrom(noteDto => noteDto.LastName))
+                .ForMember(noteCommand => noteCommand.MiddleName,
+                    opt => opt.MapFrom(noteDto => noteDto.MiddleName))
+                .ForMember(noteCommand => noteCommand.Phone,
+                    opt => opt.MapFrom(noteDto => noteDto.Phone))
+                .ForMember(noteCommand => noteCommand.Email,
+                    opt => opt.MapFrom(noteDto => noteDto.Email))
+                .ForMember(noteCommand => noteCommand.Description,
+                    opt => opt.MapFrom(noteDto => noteDto.Description));
         }
     }
 }

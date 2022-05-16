@@ -27,7 +27,12 @@ namespace Contacts.Application.Contacts.Commands.UpdateContact
                 throw new NotFoundException(nameof(Contact), request.Id);
 
             contact.FirstName = request.FirstName;
-
+            contact.LastName = request.LastName;
+            contact.MiddleName = request.MiddleName;
+            contact.Email = request.Email;
+            contact.Phone = request.Phone;
+            contact.Description = request.Description;
+            
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

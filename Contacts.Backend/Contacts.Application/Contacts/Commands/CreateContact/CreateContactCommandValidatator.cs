@@ -11,6 +11,14 @@ namespace Contacts.Application.Contacts.Commands.CreateContact
                 CreateContactCommand.FirstName).NotEmpty().MaximumLength(250);
             RuleFor(CreateContactCommand =>
                 CreateContactCommand.UserId).NotEqual(Guid.Empty);
+            RuleFor(CreateContactCommand =>
+                CreateContactCommand.LastName).MaximumLength(250);
+            RuleFor(CreateContactCommand =>
+                CreateContactCommand.MiddleName).MaximumLength(250);
+            RuleFor(CreateContactCommand =>
+                CreateContactCommand.Phone).MaximumLength(100);
+            RuleFor(CreateContactCommand =>
+                CreateContactCommand.Email).EmailAddress();
         }
     }
 }

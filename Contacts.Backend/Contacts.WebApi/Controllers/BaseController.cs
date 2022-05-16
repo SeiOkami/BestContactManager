@@ -16,10 +16,16 @@ namespace Contacts.WebApi.Controllers
         protected IMediator? Mediator =>
             _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
 
+        private readonly bool _testUser = true;
+        private readonly Guid _testUserID = Guid.Parse("20480835-FAA6-4495-8A7C-29E7CE175888");
+
         internal Guid UserId
         {
             get
             {
+                if (_testUser)
+                    return _testUserID;
+
                 var result = Guid.Empty;
 
                 if (User != null && User.Identity != null 

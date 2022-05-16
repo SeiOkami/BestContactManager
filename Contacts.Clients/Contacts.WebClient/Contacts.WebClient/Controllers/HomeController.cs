@@ -9,16 +9,24 @@ namespace Contacts.WebClient.Controllers
 {
     public class HomeController : Controller
     {
+
         private readonly ITokenService _tokenService;
+        private readonly IWebAPIService _webAPI;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ITokenService tokenService, ILogger<HomeController> logger)
+        public HomeController(ITokenService tokenService, ILogger<HomeController> logger, IWebAPIService webAPI)
         {
             _logger = logger;
             _tokenService = tokenService;
+            _webAPI = webAPI;
         }
 
         public IActionResult Index()
+        {
+            //return View();
+            return Redirect("Contacts");
+        }
+        public IActionResult Session()
         {
             return View();
         }
@@ -28,29 +36,11 @@ namespace Contacts.WebClient.Controllers
             return View();
         }
 
-        [HttpGet("Test")]
+        [HttpGet()]
         [Authorize]
         public async Task<ActionResult<String>> Test()
         {
-            using (var client = new HttpClient())
-            {
-                var tokenResponse = await _tokenService.GetToken("ContactsWebClient");
-
-                client.SetBearerToken(tokenResponse.AccessToken);
-
-                var result = client
-                  .GetAsync("https://localhost:7058/api/contact/Test")
-                  .Result;
-
-                if (result.IsSuccessStatusCode)
-                {
-                    return result.Content.ReadAsStringAsync().Result;
-                }
-                else
-                {
-                    throw new Exception("Unable to get content");
-                }
-            }
+            return await _webAPI.TestResultAsync();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

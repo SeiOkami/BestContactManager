@@ -20,7 +20,12 @@ namespace Contacts.Application.Contacts.Commands.CreateContact
             {
                 UserId = request.UserId,
                 Id = Guid.NewGuid(),
-                FirstName = request.FirstName
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                MiddleName = request.MiddleName,
+                Email = request.Email,
+                Phone = request.Phone,
+                Description = request.Description
             };
 
             await _dbContext.Contacts.AddAsync(contact, cancellationToken);
