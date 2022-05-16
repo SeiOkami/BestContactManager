@@ -96,6 +96,7 @@ namespace Contacts.WebClient.Controllers
         }
 
         // GET: ContactsController/Delete/5
+        [Authorize]
         public async Task<ActionResult> Delete(Guid id)
         {
             var contact = await _webAPI.GetContactAsync(id);
@@ -122,5 +123,34 @@ namespace Contacts.WebClient.Controllers
                 return View();
             }
         }
+
+
+        // GET: ContactsController/Clear
+        [Authorize]
+        public async Task<ActionResult> Clear()
+        {
+            return View();
+        }
+
+
+
+        // POST: ContactsController/Delete/5
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Clear(IFormCollection collection)
+        {
+            try
+            {
+                await _webAPI.ClearContacts();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View();
+            }
+        }
+
     }
 }

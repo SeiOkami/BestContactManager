@@ -19,6 +19,7 @@ namespace Contacts.WebClient.Services
         public Task<ContactModel?> GetContactAsync(Guid Id);
 
         public Task DeleteContact(Guid Id);
+        public Task ClearContacts();
 
 
     }

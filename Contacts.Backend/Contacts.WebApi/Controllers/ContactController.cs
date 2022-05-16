@@ -171,20 +171,19 @@ namespace Contacts.WebApi.Controllers
         /// <returns>Returns NoContent</returns>
         /// <response code="204">Success</response>
         /// <response code="401">If the user is unauthorized</response>
-        //[HttpDelete("clear")]
-        //[Authorize]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //public async Task<IActionResult> Clear()
-        //{
-            //var command = new DeleteContactCommand
-            //{
-            //    Id = id,
-            //    UserId = UserId
-            //};
-            //await Mediator.Send(command);
-            //return NoContent();
-        //}
+        [HttpDelete("clear")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Clear()
+        {
+            var command = new ClearContactsCommand
+            {
+                UserId = UserId
+            };
+            await Mediator.Send(command);
+            return NoContent();
+        }
 
 
     }

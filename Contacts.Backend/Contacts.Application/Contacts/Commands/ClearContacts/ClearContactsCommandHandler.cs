@@ -17,14 +17,10 @@ namespace Contacts.Application.Contacts.Commands.DeleteContact
         public async Task<Unit> Handle(
             ClearContactsCommand request, CancellationToken cancellationToken)
         {
-            
-            var contact = await _dbContext.Contacts.FindAsync(
-                new object[] { request.Id }, cancellationToken);
+            var contacts = _dbContext.Contacts.Where(contact => contact.UserId == request.UserId);
 
-            if (contact == null || contact.UserId != request.UserId)
-                throw new NotFoundException(nameof(Contact), request.Id);
+            _dbContext.Contacts.RemoveRange(contacts);
 
-            _dbContext.Contacts.Remove(contact);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

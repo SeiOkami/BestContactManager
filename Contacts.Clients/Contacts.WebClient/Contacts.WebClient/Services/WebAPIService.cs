@@ -106,6 +106,21 @@ namespace Contacts.WebClient.Services
                 throw new Exception(result.ToString());
         }
 
+
+
+        public async Task ClearContacts()
+        {
+            var tokenResponse = await tokenService.GetToken("ContactsWebClient");
+
+            using var httpClient = new HttpClient();
+            httpClient.SetBearerToken(tokenResponse.AccessToken);
+
+            var result = await httpClient.DeleteAsync(Settings.ClearMethodURL);
+
+            if (!result.IsSuccessStatusCode)
+                throw new Exception(result.ToString());
+        }
+
         //public async Task<object?> SendAsync(string methodURL, Object typeResult, string additionalURL = "")
         //{
         //    var tokenResponse = await tokenService.GetToken("ContactsWebClient");

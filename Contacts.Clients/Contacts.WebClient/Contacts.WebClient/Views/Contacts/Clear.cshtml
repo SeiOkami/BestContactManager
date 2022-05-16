@@ -1,0 +1,16 @@
+﻿
+@{
+    var title = "Clear all contacts";
+    ViewData["Title"] = title;
+}
+
+<h1>@title</h1>
+
+<h3>Are you sure you want to clear all contacts?</h3>
+
+<div>
+    <form asp-action="Clear">
+        <input type="submit" value="Clear" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

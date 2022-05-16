@@ -12,6 +12,7 @@ namespace Contacts.Application.Contacts.Queries.GetContactList
         public string MiddleName { get; set; } = "";
         public string Phone { get; set; } = "";
         public string Email { get; set; } = "";
+        public string Description { get; set; } = "";
 
         public void Mapping(Profile profile)
         {
@@ -28,6 +29,8 @@ namespace Contacts.Application.Contacts.Queries.GetContactList
                     opt => opt.MapFrom(cont => cont.Phone))
                 .ForMember(contDto => contDto.Email,
                     opt => opt.MapFrom(cont => cont.Email))
+                .ForMember(contDto => contDto.Description,
+                    opt => opt.MapFrom(cont => cont.Description))
                 ;
         }
     }
