@@ -7,5 +7,8 @@ namespace Contacts.Application.Interfaces
     {
         DbSet<Contact> Contacts { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+
+        Task GenerateAsync(Guid UserID);
+
     }
 }

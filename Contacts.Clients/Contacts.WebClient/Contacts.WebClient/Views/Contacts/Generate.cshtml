@@ -1,0 +1,16 @@
+﻿
+@{
+    var title = "Generate test contacts";
+    ViewData["Title"] = title;
+}
+
+<h1>@title</h1>
+
+<h3>Are you sure you want to generate test contacts?</h3>
+
+<div>
+    <form asp-action="Generate">
+        <input type="submit" value="Generate" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

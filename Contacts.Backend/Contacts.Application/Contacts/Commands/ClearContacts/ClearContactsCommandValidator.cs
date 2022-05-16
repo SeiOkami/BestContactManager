@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentValidation;
 
-namespace Contacts.Application.Contacts.Commands.DeleteContact
+namespace Contacts.Application.Contacts.Commands.ClearContacts
 {
     public class ClearContactsCommandValidator : AbstractValidator<ClearContactsCommand>
     {

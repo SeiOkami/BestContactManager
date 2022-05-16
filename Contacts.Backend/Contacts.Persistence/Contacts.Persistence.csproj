@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Contacts.Application\Contacts.Application.csproj" />
+    <ProjectReference Include="..\RandomizerLibrary\RandomizerLibrary.csproj" />
   </ItemGroup>
 
 </Project>

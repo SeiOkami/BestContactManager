@@ -20,6 +20,7 @@ namespace Contacts.WebClient.Services
 
         public Task DeleteContact(Guid Id);
         public Task ClearContacts();
+        public Task GenerateContacts();
 
 
     }

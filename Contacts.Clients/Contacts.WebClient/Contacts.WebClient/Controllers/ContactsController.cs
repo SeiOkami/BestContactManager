@@ -127,14 +127,14 @@ namespace Contacts.WebClient.Controllers
 
         // GET: ContactsController/Clear
         [Authorize]
-        public async Task<ActionResult> Clear()
+        public ActionResult Clear()
         {
             return View();
         }
 
 
 
-        // POST: ContactsController/Delete/5
+        // POST: ContactsController/Clear
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -151,6 +151,35 @@ namespace Contacts.WebClient.Controllers
                 return View();
             }
         }
+
+
+        // GET: ContactsController/Generate
+        [Authorize]
+        public ActionResult Generate()
+        {
+            return View();
+        }
+
+
+
+        // POST: ContactsController/Generate
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Generate(IFormCollection collection)
+        {
+            try
+            {
+                await _webAPI.GenerateContacts();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View();
+            }
+        }
+
 
     }
 }

@@ -9,6 +9,8 @@ using Contacts.Application.Contacts.Queries.GetContactDetails;
 using Contacts.Application.Contacts.Commands.CreateContact;
 using Contacts.Application.Contacts.Commands.UpdateContact;
 using Contacts.Application.Contacts.Commands.DeleteContact;
+using Contacts.Application.Contacts.Commands.ClearContacts;
+using Contacts.Application.Contacts.Commands.GenerateContacts;
 //using Contacts.WebApi.Models;
 
 namespace Contacts.WebApi.Controllers
@@ -161,13 +163,12 @@ namespace Contacts.WebApi.Controllers
 
 
         /// <summary>
-        /// Deletes the contact by id
+        /// Clear all contacts
         /// </summary>
         /// <remarks>
         /// Sample request:
-        /// DELETE /contact/88DEB432-062F-43DE-8DCD-8B6EF79073D3
+        /// DELETE /contact/clear
         /// </remarks>
-        /// <param name="id">Id of the contact (guid)</param>
         /// <returns>Returns NoContent</returns>
         /// <response code="204">Success</response>
         /// <response code="401">If the user is unauthorized</response>
@@ -185,6 +186,30 @@ namespace Contacts.WebApi.Controllers
             return NoContent();
         }
 
+
+        /// <summary>
+        /// Generate test contacts 
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// DELETE /contact/clear
+        /// </remarks>
+        /// <returns>Returns NoContent</returns>
+        /// <response code="204">Success</response>
+        /// <response code="401">If the user is unauthorized</response>
+        [HttpPost("generate")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Generate()
+        {
+            var command = new GenerateContactsCommand
+            {
+                UserId = UserId
+            };
+            await Mediator.Send(command);
+            return NoContent();
+        }
 
     }
 }

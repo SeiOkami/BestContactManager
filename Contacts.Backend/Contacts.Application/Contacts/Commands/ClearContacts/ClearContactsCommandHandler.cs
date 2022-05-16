@@ -3,7 +3,7 @@ using Contacts.Application.Common.Exceptions;
 using Contacts.Domain;
 using MediatR;
 
-namespace Contacts.Application.Contacts.Commands.DeleteContact
+namespace Contacts.Application.Contacts.Commands.ClearContacts
 {
     public class ClearContactsCommandHandler
         : IRequestHandler<ClearContactsCommand>
