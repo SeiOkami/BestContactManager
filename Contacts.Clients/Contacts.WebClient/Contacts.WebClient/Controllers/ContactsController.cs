@@ -4,6 +4,7 @@ using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace Contacts.WebClient.Controllers
 {
@@ -21,13 +22,48 @@ namespace Contacts.WebClient.Controllers
             _webAPI = webAPI;
         }
 
-
         [HttpGet()]
         [Authorize]
         public async Task<ActionResult> Index()
         {
-            var a = (ContactsModel)(await _webAPI.GetResultAsync(_webAPI.Settings.ListMethodURL, typeof(ContactsModel)));
-            return View(a);
+            var contacts = await _webAPI.ListContacts();
+            return View(contacts);
+        }
+
+        [Authorize]
+        public async Task<FileStreamResult> Export()
+        {
+            var fileStream = await _webAPI.ExportContacts();
+            return File(fileStream, "application/json", "contacts.json");
+        }
+        
+        [Authorize]
+        public ActionResult Import()
+        {
+            var model = new ImportContactsModel();
+            return View(model);
+        }
+
+        // POST: ContactsController/Import
+        [HttpPost]
+        [Authorize]
+        //public async Task<ActionResult> Import(ImportContactsModel model)
+        public async Task<ActionResult> Import([FromForm] ImportContactsModel model)
+        {
+            try
+            {
+                if (model.Clear)
+                    await _webAPI.ClearContacts();
+
+                await _webAPI.ImportContacts(model);
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View();
+            }
         }
 
         // GET: ContactsController/Details/5
@@ -124,15 +160,12 @@ namespace Contacts.WebClient.Controllers
             }
         }
 
-
         // GET: ContactsController/Clear
         [Authorize]
         public ActionResult Clear()
         {
             return View();
         }
-
-
 
         // POST: ContactsController/Clear
         [HttpPost]
@@ -152,7 +185,6 @@ namespace Contacts.WebClient.Controllers
             }
         }
 
-
         // GET: ContactsController/Generate
         [Authorize]
         public ActionResult Generate()
@@ -160,16 +192,17 @@ namespace Contacts.WebClient.Controllers
             return View();
         }
 
-
-
         // POST: ContactsController/Generate
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Generate(IFormCollection collection)
+        public async Task<ActionResult> Generate(GenerateContactsModel model)
         {
             try
             {
+                if (model.Clear)
+                    await _webAPI.ClearContacts();
+
                 await _webAPI.GenerateContacts();
                 return RedirectToAction(nameof(Index));
             }
@@ -179,7 +212,6 @@ namespace Contacts.WebClient.Controllers
                 return View();
             }
         }
-
 
     }
 }

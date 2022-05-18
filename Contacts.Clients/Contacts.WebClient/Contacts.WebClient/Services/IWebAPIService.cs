@@ -6,12 +6,10 @@ namespace Contacts.WebClient.Services
     {
         public WebAPIServiceSettings Settings { get; set; }
 
-        public Task<object?> GetResultAsync(string methodURL, Type typeResult, string additionalURL = "");
-        
-        public async Task<string?> TestResultAsync()
-        {
-            return (string?)(await GetResultAsync(Settings.MainURL + "Test", typeof(string)));
-        }
+        public Task<ContactsModel?> ListContacts();
+        public Task<Stream> ExportContacts();
+        public Task ImportContacts(ImportContactsModel model);
+
         public Task CreateContact(ContactModel contact);
 
         public Task UpdateContact(ContactModel contact);
@@ -21,7 +19,6 @@ namespace Contacts.WebClient.Services
         public Task DeleteContact(Guid Id);
         public Task ClearContacts();
         public Task GenerateContacts();
-
-
+        
     }
 }

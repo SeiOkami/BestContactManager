@@ -1,0 +1,30 @@
+﻿@model Contacts.WebClient.Models.ImportContactsModel
+
+@{
+    var title = "Import contacts";
+    ViewData["Title"] = title;
+}
+<br />
+<h1>@title</h1>
+
+<h3>Select contact file</h3>
+
+<div>
+    <form asp-action="Import" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for=FileContacts class="control-label"></label>
+            <input asp-for=FileContacts />
+        </div>
+        <div class="form-group">
+            <label asp-for=Clear class="control-label"></label>
+            <input asp-for=Clear />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Import" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -22,9 +22,18 @@ namespace Contacts.Application.Contacts.Commands.UpdateContact
             
             var contact = await _dbContext.Contacts.FirstOrDefaultAsync(
                 item => item.Id == request.Id, cancellationToken);
-            
-            if (contact == null || contact.UserId != request.UserId)
+
+            if (contact == null)
+            {
+                contact = new();
+                contact.Id = request.Id;
+                contact.UserId = request.UserId;
+                await _dbContext.Contacts.AddAsync(contact);
+            }                
+            else if (contact.UserId != request.UserId)
+            {
                 throw new NotFoundException(nameof(Contact), request.Id);
+            }
 
             contact.FirstName = request.FirstName;
             contact.LastName = request.LastName;

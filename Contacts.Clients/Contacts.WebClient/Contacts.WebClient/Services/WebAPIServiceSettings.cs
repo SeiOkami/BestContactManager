@@ -11,6 +11,7 @@
         public string DeleteMethodName { get; set; } = String.Empty;
         public string ClearMethodName { get; set; } = String.Empty;
         public string GenerateMethodName { get; set; } = String.Empty;
+        public string ImportMethodName { get; set; } = String.Empty;
 
         public string ListMethodURL { get => MainURL + ListMethodName; }
         public string DetailsMethodURL { get => MainURL + DetailsMethodName; }
@@ -19,6 +20,7 @@
         public string DeleteMethodURL { get => MainURL + DeleteMethodName; }
         public string ClearMethodURL { get => MainURL + ClearMethodName; }
         public string GenerateMethodURL { get => MainURL + GenerateMethodName; }
+        public string ImportMethodURL { get => MainURL + ImportMethodName; }
 
     }
 }

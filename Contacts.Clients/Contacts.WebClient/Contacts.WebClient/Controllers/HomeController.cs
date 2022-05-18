@@ -10,20 +10,10 @@ namespace Contacts.WebClient.Controllers
     public class HomeController : Controller
     {
 
-        private readonly ITokenService _tokenService;
-        private readonly IWebAPIService _webAPI;
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ITokenService tokenService, ILogger<HomeController> logger, IWebAPIService webAPI)
-        {
-            _logger = logger;
-            _tokenService = tokenService;
-            _webAPI = webAPI;
-        }
+        public HomeController(){}
 
         public IActionResult Index()
         {
-            //return View();
             return Redirect("Contacts");
         }
         public IActionResult Session()
@@ -34,13 +24,6 @@ namespace Contacts.WebClient.Controllers
         public IActionResult Privacy()
         {
             return View();
-        }
-
-        [HttpGet()]
-        [Authorize]
-        public async Task<ActionResult<String>> Test()
-        {
-            return await _webAPI.TestResultAsync();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -3,6 +3,7 @@ using Contacts.Application.Interfaces;
 using Contacts.Domain;
 using Contacts.Persistence.EntityTypeConfigurations;
 using RandomizerLibrary;
+using Newtonsoft.Json;
 
 namespace Contacts.Persistence
 {
@@ -47,7 +48,6 @@ namespace Contacts.Persistence
 
             await SaveChangesAsync();
         }
-
 
     }
 }

@@ -1,4 +1,4 @@
-﻿
+﻿@model Contacts.WebClient.Models.GenerateContactsModel
 @{
     var title = "Generate test contacts";
     ViewData["Title"] = title;
@@ -10,6 +10,10 @@
 
 <div>
     <form asp-action="Generate">
+        <div class="form-group">
+            <label asp-for=Clear class="control-label"></label>
+            <input asp-for=Clear />
+        </div>
         <input type="submit" value="Generate" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>

@@ -11,6 +11,7 @@ using Contacts.Application.Contacts.Commands.UpdateContact;
 using Contacts.Application.Contacts.Commands.DeleteContact;
 using Contacts.Application.Contacts.Commands.ClearContacts;
 using Contacts.Application.Contacts.Commands.GenerateContacts;
+using Contacts.Application.Contacts.Commands.ImportContacts;
 //using Contacts.WebApi.Models;
 
 namespace Contacts.WebApi.Controllers
@@ -192,7 +193,7 @@ namespace Contacts.WebApi.Controllers
         /// </summary>
         /// <remarks>
         /// Sample request:
-        /// DELETE /contact/clear
+        /// POST /contact/clear
         /// </remarks>
         /// <returns>Returns NoContent</returns>
         /// <response code="204">Success</response>
@@ -208,6 +209,39 @@ namespace Contacts.WebApi.Controllers
                 UserId = UserId
             };
             await Mediator.Send(command);
+            return NoContent();
+        }
+
+
+
+        /// <summary>
+        /// Import contacts from file
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// POST /contact/import
+        /// </remarks>
+        /// <returns>Returns NoContent</returns>
+        /// <response code="204">Success</response>
+        /// <response code="401">If the user is unauthorized</response>
+        [HttpPost("import")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Import(ImportContactsDto model)
+        {
+
+            var command = _mapper.Map<ImportContactsCommand>(model);
+            command.UserId = UserId;
+            command.Mediator = Mediator;
+            await Mediator.Send(command);
+
+            //var command = new ImportContactsCommand
+            //{
+            //    UserId = UserId,
+            //    ContactsJSON = contacts
+            //};
+            //await Mediator.Send(command);
             return NoContent();
         }
 
