@@ -12,6 +12,7 @@ using Contacts.Application.Contacts.Commands.DeleteContact;
 using Contacts.Application.Contacts.Commands.ClearContacts;
 using Contacts.Application.Contacts.Commands.GenerateContacts;
 using Contacts.Application.Contacts.Commands.ImportContacts;
+using System.Security.Claims;
 //using Contacts.WebApi.Models;
 
 namespace Contacts.WebApi.Controllers
@@ -49,6 +50,8 @@ namespace Contacts.WebApi.Controllers
         [Authorize]
         public async Task<ActionResult<ContactListVm>> GetAll()
         {
+            var name = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var query = new GetContactListQuery
             {
                 UserId = UserId

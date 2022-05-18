@@ -40,6 +40,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(config =>
     config.Password.RequireDigit = false;
     config.Password.RequireNonAlphanumeric = false;
     config.Password.RequireUppercase = false;
+    //config.Tokens.ProviderMap
 }).AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
 
 
