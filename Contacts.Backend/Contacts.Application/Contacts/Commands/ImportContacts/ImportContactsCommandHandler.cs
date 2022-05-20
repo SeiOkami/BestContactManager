@@ -7,8 +7,6 @@ namespace Contacts.Application.Contacts.Commands.ImportContacts
 {
     public class ImportContactsCommandHandler : IRequestHandler<ImportContactsCommand>
     {
-//        public ImportContactsCommandHandler() { }
-
         public async Task<Unit> Handle(
             ImportContactsCommand request, CancellationToken cancellationToken)
         {

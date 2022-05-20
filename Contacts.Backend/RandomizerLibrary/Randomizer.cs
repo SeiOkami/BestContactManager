@@ -9,11 +9,11 @@ namespace RandomizerLibrary
     public static class Randomizer
     {
 
-        private static Random random = new Random();
+        private readonly static Random random = new();
 
-        private static char[] symbolsMail = "abcdefghijklmnopqrstuvwxyz".ToArray();
+        private readonly static char[] symbolsMail = "abcdefghijklmnopqrstuvwxyz".ToArray();
 
-        private static string[] FirstWomanNames =
+        private readonly static string[] FirstWomanNames =
             {
                 "Ава","Августа","Августина","Авдотья","Аврора","Агапия","Агата","Агафия","Агафья","Аглая","Агния","Агриппина",
                 "Ада","Аделаида","Аделина","Аделия","Адель","Адриана","Азалия","Аида","Аксинья","Алана","Алевтина","Алекса",
@@ -44,7 +44,7 @@ namespace RandomizerLibrary
                 "Юлианна","Юлия","Юния","Ядвига","Яна","Янина","Ярина","Ярослава"
             };
 
-        private static string[] FirstManNames =
+        private readonly static string[] FirstManNames =
             {
 
             "Абрам","Авангард","Августин","Авдей","Аверкий","Аверьян","Авксентий","Авраам","Агап","Агапий","Агапит","Агафодор",
@@ -78,7 +78,7 @@ namespace RandomizerLibrary
 
             };
 
-        private static string[] MiddleWomanNames = {
+        private readonly static string[] MiddleWomanNames = {
             "Августовна", "Акимовна", "Александровна", "Алексеевна", "Анатольевна", "Андреевна", "Андрониковна",
             "Антоновна", "Аркадьевна", "Афанасьевна", "Батьковна", "Богдановна", "Борисовна", "Валентиновна",
             "Валерьевна", "Васильевна", "Вахтанговна", "Вениаминовна", "Викторовна", "Виссарионовна", "Витальевна",
@@ -93,7 +93,7 @@ namespace RandomizerLibrary
             "Фёдоровна", "Филипповна", "Юрьевна", "Яковлевна", "Ярославовна"
         };
 
-        private static string[] MiddleManNames = {
+        private readonly static string[] MiddleManNames = {
             "Ааронович", "Абрамович", "Августович", "Авдеевич", "Аверьянович", "Адамович", "Адрианович",
             "Акимович", "Аксёнович", "Александрович", "Алексеевич", "Анатольевич", "Андреевич", "Андроникович",
             "Анисимович", "Антипович", "Антонович", "Ануфриевич", "Аркадьевич", "Арсенович", "Арсеньевич",
@@ -126,7 +126,7 @@ namespace RandomizerLibrary
             "Эдуардович", "Эдуардович", "Юлианович", "Юльевич", "Юрьевич", "Яковлевич", "Якубович", "Ярославович"
         };
 
-        private static string[] LastNames =
+        private readonly static string[] LastNames =
             {
             "Смирнов","Иванов","Кузнецов","Соколов","Попов","Лебедев","Козлов","Новиков","Морозов","Петров","Волков","Соловьёв",
                 "Васильев","Зайцев","Павлов","Семёнов","Голубев","Виноградов","Богданов","Воробьёв","Фёдоров","Михайлов","Беляев",
@@ -150,9 +150,9 @@ namespace RandomizerLibrary
                 "Стрелков","Гущин","Тетерин","Колобов","Субботин","Фокин","Блохин","Селиверстов","Пестов","Кондратьев","Силин","Меркушев","Лыткин","Туров"
         };
 
-        private static string[][] FirstNames = { FirstWomanNames, FirstManNames };
-        private static string[][] MiddleNames = { MiddleWomanNames, MiddleManNames };
-        private static string[] LastNamesEnding = { "а", "" };
+        private readonly static string[][] FirstNames = { FirstWomanNames, FirstManNames };
+        private readonly static string[][] MiddleNames = { MiddleWomanNames, MiddleManNames };
+        private readonly static string[] LastNamesEnding = { "а", "" };
 
         /// <summary>
         /// Генерирует полное имя (Имя Фамилия)
@@ -163,16 +163,16 @@ namespace RandomizerLibrary
             var sex = (byte)random.Next(0, 2);
 
             var firstNames = FirstNames[sex];
-            var firstName = firstNames[random.Next(0, firstNames.Count())];
+            var firstName = firstNames[random.Next(0, firstNames.Length)];
 
-            var lastName = LastNames[random.Next(0, LastNames.Count())] + LastNamesEnding[sex];
+            var lastName = LastNames[random.Next(0, LastNames.Length)] + LastNamesEnding[sex];
 
             var fullName = $"{firstName} {lastName}";
 
             if (andMiddleName)
             {
                 var middleNames = MiddleNames[sex];
-                var middleName = middleNames[random.Next(0, middleNames.Count())];
+                var middleName = middleNames[random.Next(0, middleNames.Length)];
                 fullName += " " + middleName;
             }
 
@@ -191,7 +191,7 @@ namespace RandomizerLibrary
         {
             var length = random.Next(MinLength, MaxLength);
 
-            StringBuilder result = new StringBuilder();
+            var result = new StringBuilder();
             while (result.Length < length)
             {
                 var symbol = symbolsMail[random.Next(0, symbolsMail.Length)];

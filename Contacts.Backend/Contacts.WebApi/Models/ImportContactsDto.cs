@@ -8,27 +8,12 @@ namespace Contacts.WebApi.Models
 {
     public class ImportContactsDto : IMapWith<ImportContactsCommand>
     {
-        public List<UpdateContactDto> Contacts { get; set; }
+        public List<UpdateContactDto> Contacts { get; set; } = null!;
         public void Mapping(Profile profile)
         {
             profile.CreateMap<ImportContactsDto, ImportContactsCommand>()
                 .ForMember(noteCommand => noteCommand.Contacts,
                     opt => opt.MapFrom(noteDto => noteDto.Contacts)).ReverseMap();
-                    //opt => opt.MapFrom< List < UpdateContactDto > , List < UpdateContactCommand >   >(dto => dto.contacts)).ReverseMap();
-                //.AfterMap((src, dest) => //src is a list type
-                //{
-                //    foreach (var myrealclass in src.contacts)
-                //        dest.Contacts.Add(new UpdateContactCommand()
-                //        {
-                //            Id = myrealclass.Id,
-                //            FirstName = myrealclass.FirstName,
-                //            LastName = myrealclass.LastName,
-                //            MiddleName = myrealclass.MiddleName,
-                //            Phone = myrealclass.Phone,
-                //            Email = myrealclass.Email,
-                //            Description = myrealclass.Description
-                //        });
-                //});
         }
     }
 }

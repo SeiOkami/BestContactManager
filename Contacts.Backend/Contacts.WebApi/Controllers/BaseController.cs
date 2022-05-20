@@ -12,9 +12,9 @@ namespace Contacts.WebApi.Controllers
     public abstract class BaseController : ControllerBase
     {
 
-        private IMediator? _mediator;
-        protected IMediator? Mediator =>
-            _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+        private IMediator _mediator = null!;
+        protected IMediator Mediator =>
+            _mediator ??= HttpContext.RequestServices.GetService<IMediator>() ?? null!;
 
         private readonly bool _testUser = false;
         private readonly Guid _testUserID = Guid.Parse("20480835-FAA6-4495-8A7C-29E7CE175888");

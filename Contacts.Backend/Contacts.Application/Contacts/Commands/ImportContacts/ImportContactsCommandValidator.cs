@@ -8,7 +8,6 @@ namespace Contacts.Application.Contacts.Commands.ImportContacts
         public ImportContactsCommandValidator()
         {
             RuleFor(command => command.UserId).NotEqual(Guid.Empty);
-            //RuleFor(command => command.ContactsJSON).NotEmpty();
             RuleFor(command => command.Contacts).NotEmpty();
         }
     }

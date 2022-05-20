@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Contacts.WebApi.Models;
@@ -12,9 +10,6 @@ using Contacts.Application.Contacts.Commands.DeleteContact;
 using Contacts.Application.Contacts.Commands.ClearContacts;
 using Contacts.Application.Contacts.Commands.GenerateContacts;
 using Contacts.Application.Contacts.Commands.ImportContacts;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-//using Contacts.WebApi.Models;
 
 namespace Contacts.WebApi.Controllers
 {
@@ -27,13 +22,6 @@ namespace Contacts.WebApi.Controllers
         private readonly IMapper _mapper;
 
         public ContactController(IMapper mapper) => _mapper = mapper;
-
-        [HttpGet("Test")]
-        [Authorize]
-        public async Task<ActionResult<String>> Test()
-        {
-            return Ok("DA");
-        }
 
         /// <summary>
         /// Gets the list of contacts
@@ -51,8 +39,6 @@ namespace Contacts.WebApi.Controllers
         [Authorize]
         public async Task<ActionResult<ContactListVm>> GetAll()
         {
-            var name = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
-            //var afff = await HttpContext.AuthenticateAsync();
             var query = new GetContactListQuery
             {
                 UserId = UserId
@@ -234,18 +220,11 @@ namespace Contacts.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Import(ImportContactsDto model)
         {
-
             var command = _mapper.Map<ImportContactsCommand>(model);
             command.UserId = UserId;
             command.Mediator = Mediator;
             await Mediator.Send(command);
 
-            //var command = new ImportContactsCommand
-            //{
-            //    UserId = UserId,
-            //    ContactsJSON = contacts
-            //};
-            //await Mediator.Send(command);
             return NoContent();
         }
 

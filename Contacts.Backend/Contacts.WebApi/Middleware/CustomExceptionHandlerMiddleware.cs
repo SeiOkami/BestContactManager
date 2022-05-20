@@ -23,7 +23,7 @@ namespace Contacts.WebApi.Middleware
             }
             catch (Exception ex)
             {
-                HandleExceptionAsync(context, ex);
+                await HandleExceptionAsync(context, ex);
             }
         }
 

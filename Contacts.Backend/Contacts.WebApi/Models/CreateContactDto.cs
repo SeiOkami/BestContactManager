@@ -8,7 +8,7 @@ namespace Contacts.WebApi.Models
     public class CreateContactDto : IMapWith<CreateContactCommand>
     {
         [Required]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = String.Empty;
 
         public string? LastName { get; set; } = "";
         

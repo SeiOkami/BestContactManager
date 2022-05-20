@@ -24,7 +24,6 @@ namespace Contacts.WebApi
         public static void Main(string[] args)
         {
 
-            //var builder = WebApplication.CreateBuilder(args);
             var builder = WebApplication.CreateBuilder(args);
             builder.Host.UseSerilog();
 
@@ -61,7 +60,7 @@ namespace Contacts.WebApi
                 options.Audience = "ContactsWebAPI";
                 options.RequireHttpsMetadata = false;
             });
-                        
+
             services.AddVersionedApiExplorer(opt => opt.GroupNameFormat = "'v'VVV");
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
@@ -83,7 +82,10 @@ namespace Contacts.WebApi
                 .CreateLogger();
 
             var app = builder.Build();
-            
+
+            app.UseSwagger();
+
+
             using (var scope = app.Services.CreateScope())
             {
                 var serviceProvider = scope.ServiceProvider;
@@ -96,20 +98,23 @@ namespace Contacts.WebApi
                 {
                     Log.Fatal(ex, "An error occurred while app initialization");
                 }
+
+                var apiProvider = serviceProvider.GetRequiredService<IApiVersionDescriptionProvider>();
+                app.UseSwaggerUI(config =>
+                {
+                    if (apiProvider != null)
+                    {
+                        foreach (var description in apiProvider.ApiVersionDescriptions)
+                        {
+                            config.SwaggerEndpoint(
+                                $"/swagger/{description.GroupName}/swagger.json",
+                                description.GroupName.ToUpperInvariant());
+                            config.RoutePrefix = string.Empty;
+                        }
+                    }
+                });
             }
 
-            app.UseSwagger();
-            app.UseSwaggerUI(config =>
-            {
-                var provider = services.BuildServiceProvider().GetRequiredService<IApiVersionDescriptionProvider>();
-                foreach (var description in provider.ApiVersionDescriptions)
-                {
-                    config.SwaggerEndpoint(
-                        $"/swagger/{description.GroupName}/swagger.json",
-                        description.GroupName.ToUpperInvariant());
-                    config.RoutePrefix = string.Empty;
-                }
-            });
             app.UseCustomExceptionHandler();
             app.UseRouting();
             app.UseHttpsRedirection();
@@ -122,8 +127,6 @@ namespace Contacts.WebApi
             {
                 endpoints.MapControllers();
             });
-
-            app.MapGet("/", () => "Hello World!");
 
             app.Run();
         }

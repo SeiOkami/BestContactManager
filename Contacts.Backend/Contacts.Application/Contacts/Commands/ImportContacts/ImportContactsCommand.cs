@@ -9,7 +9,6 @@ namespace Contacts.Application.Contacts.Commands.ImportContacts
     public class ImportContactsCommand : IRequest
     {
         public Guid UserId { get; set; }
-        //public List<Contact> ContactsJSON { get; set; } = String.Empty;
         public List<UpdateContactCommand> Contacts { get; set; } = null!;
         public IMediator Mediator { get; set; } = null!;
     }

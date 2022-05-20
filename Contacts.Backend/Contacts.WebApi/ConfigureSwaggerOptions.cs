@@ -20,6 +20,7 @@ namespace Contacts.WebApi
         {
             foreach (var description in _provider.ApiVersionDescriptions)
             {
+
                 var apiVersion = description.ApiVersion.ToString();
                 options.SwaggerDoc(description.GroupName,
                     new OpenApiInfo
@@ -61,7 +62,7 @@ namespace Contacts.WebApi
                                 Id = $"AuthToken {apiVersion}"
                             }
                         },
-                        new string[] { }
+                        Array.Empty<string>()
                     }
                 });
 
