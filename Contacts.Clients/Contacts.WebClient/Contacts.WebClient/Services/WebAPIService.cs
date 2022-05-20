@@ -1,5 +1,6 @@
 ﻿using Contacts.WebClient.Models;
 using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Text;
@@ -18,9 +19,10 @@ namespace Contacts.WebClient.Services
             this.Settings = options.Value;
         }        
 
-        public async Task<ContactsModel?> ListContacts()
+        public async Task<ContactsModel?> ListContacts(HttpContext сontext)
         {
-            using var httpClient = await NewHttpClient();
+
+            using var httpClient = await NewHttpClient(сontext);
 
             var result = await httpClient.GetAsync(Settings.ListMethodURL);
             if (result.IsSuccessStatusCode)
@@ -29,9 +31,9 @@ namespace Contacts.WebClient.Services
                 throw new Exception(result.ToString());
         }
 
-        public async Task<Stream> ExportContacts()
+        public async Task<Stream> ExportContacts(HttpContext сontext)
         {
-            using var httpClient = await NewHttpClient();
+            using var httpClient = await NewHttpClient(сontext);
 
             var result = await httpClient.GetAsync(Settings.ListMethodURL);
             if (result.IsSuccessStatusCode)
@@ -44,9 +46,9 @@ namespace Contacts.WebClient.Services
             }
         }
 
-        public async Task CreateContact(ContactModel contact)
+        public async Task CreateContact(HttpContext сontext, ContactModel contact)
         {
-            using var httpClient = await NewHttpClient();
+            using var httpClient = await NewHttpClient(сontext);
             
             var json = JsonConvert.SerializeObject(contact);
             var data = new StringContent(json, Encoding.UTF8, "application/json");
@@ -56,19 +58,19 @@ namespace Contacts.WebClient.Services
                 throw new Exception(result.ToString());
         }
 
-        private async Task<HttpClient> NewHttpClient()
+        private async Task<HttpClient> NewHttpClient(HttpContext сontext)
         {
-            var tokenResponse = await tokenService.GetToken("ContactsWebClient");
+            var token = await tokenService.GetToken(сontext);
 
             var httpClient = new HttpClient();
-            httpClient.SetBearerToken(tokenResponse.AccessToken);
+            httpClient.SetBearerToken(token);
             
             return httpClient;
         }
 
-        public async Task UpdateContact(ContactModel contact)
+        public async Task UpdateContact(HttpContext сontext, ContactModel contact)
         {
-            using var httpClient = await NewHttpClient();
+            using var httpClient = await NewHttpClient(сontext);
 
             var fullURL = Settings.UpdateMethodURL;
 
@@ -80,9 +82,9 @@ namespace Contacts.WebClient.Services
                 throw new Exception(result.ToString());
         }
 
-        public async Task<ContactModel?> GetContactAsync(Guid ID)
+        public async Task<ContactModel?> GetContactAsync(HttpContext сontext, Guid ID)
         {
-            using var httpClient = await NewHttpClient();
+            using var httpClient = await NewHttpClient(сontext);
 
             var fullURL = $"{Settings.DetailsMethodURL}{ID}";
 
@@ -93,9 +95,9 @@ namespace Contacts.WebClient.Services
                 throw new Exception(result.ToString());
         }
 
-        public async Task DeleteContact(Guid ID)
+        public async Task DeleteContact(HttpContext сontext, Guid ID)
         {
-            using var httpClient = await NewHttpClient();
+            using var httpClient = await NewHttpClient(сontext);
 
             var fullURL = $"{Settings.DeleteMethodURL}{ID}";
 
@@ -105,9 +107,9 @@ namespace Contacts.WebClient.Services
                 throw new Exception(result.ToString());
         }
 
-        public async Task ClearContacts()
+        public async Task ClearContacts(HttpContext сontext)
         {
-            using var httpClient = await NewHttpClient();
+            using var httpClient = await NewHttpClient(сontext);
 
             var result = await httpClient.DeleteAsync(Settings.ClearMethodURL);
 
@@ -115,9 +117,9 @@ namespace Contacts.WebClient.Services
                 throw new Exception(result.ToString());
         }
 
-        public async Task GenerateContacts()
+        public async Task GenerateContacts(HttpContext сontext)
         {
-            using var httpClient = await NewHttpClient();
+            using var httpClient = await NewHttpClient(сontext);
 
             var result = await httpClient.PostAsync(Settings.GenerateMethodURL, null);
 
@@ -125,7 +127,7 @@ namespace Contacts.WebClient.Services
                 throw new Exception(result.ToString());
         }
 
-        public async Task ImportContacts(ImportContactsModel model)
+        public async Task ImportContacts(HttpContext сontext, ImportContactsModel model)
         {
 
             var contacts = new StringBuilder();
@@ -135,7 +137,7 @@ namespace Contacts.WebClient.Services
                     contacts.AppendLine(await reader.ReadLineAsync());
             }
 
-            using var httpClient = await NewHttpClient();
+            using var httpClient = await NewHttpClient(сontext);
 
             var content = new StringContent(contacts.ToString(), Encoding.UTF8, "application/json");
 

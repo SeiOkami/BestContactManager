@@ -14,7 +14,7 @@
 <h2>Properties</h2>
 
 <dl>
-    @foreach (var prop in (await Context.AuthenticateAsync()).Properties.Items)
+    @foreach (var prop in (await Context.AuthenticateAsync())?.Properties?.Items ?? new Dictionary<string, string?>())
     {
         <dt>@prop.Key</dt>
         <dd>@prop.Value</dd>

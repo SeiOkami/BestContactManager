@@ -4,7 +4,6 @@ namespace Contacts.WebClient.Models
 {
     public class ContactsModel
     {
-        public List<ContactModel> Contacts { get; set; } = new();
-        
+        public List<ContactModel> Contacts { get; set; } = new();        
     }
 }

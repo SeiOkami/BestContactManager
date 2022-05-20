@@ -57,7 +57,7 @@ namespace Contacts.WebApi
                 config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer("Bearer", options =>
             {
-                options.Authority = "https://localhost:7251";//https://localhost:7009;http://localhost:5009https://localhost:7251;http://localhost:5251
+                options.Authority = "https://localhost:7251";
                 options.Audience = "ContactsWebAPI";
                 options.RequireHttpsMetadata = false;
             });

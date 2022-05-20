@@ -1,6 +1,7 @@
 ﻿using Contacts.WebClient.Models;
 using Contacts.WebClient.Services;
 using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace Contacts.WebClient.Controllers
 {
-    public class ContactsController : Controller
+    public class ContactsController : BaseController
     {
 
         private readonly ITokenService _tokenService;
@@ -26,14 +27,14 @@ namespace Contacts.WebClient.Controllers
         [Authorize]
         public async Task<ActionResult> Index()
         {
-            var contacts = await _webAPI.ListContacts();
+            var contacts = await _webAPI.ListContacts(HttpContext);
             return View(contacts);
         }
 
         [Authorize]
         public async Task<FileStreamResult> Export()
         {
-            var fileStream = await _webAPI.ExportContacts();
+            var fileStream = await _webAPI.ExportContacts(HttpContext);
             return File(fileStream, "application/json", "contacts.json");
         }
         
@@ -47,15 +48,14 @@ namespace Contacts.WebClient.Controllers
         // POST: ContactsController/Import
         [HttpPost]
         [Authorize]
-        //public async Task<ActionResult> Import(ImportContactsModel model)
         public async Task<ActionResult> Import([FromForm] ImportContactsModel model)
         {
             try
             {
                 if (model.Clear)
-                    await _webAPI.ClearContacts();
+                    await _webAPI.ClearContacts(HttpContext);
 
-                await _webAPI.ImportContacts(model);
+                await _webAPI.ImportContacts(HttpContext, model);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -69,7 +69,7 @@ namespace Contacts.WebClient.Controllers
         // GET: ContactsController/Details/5
         public async Task<ActionResult> Details(Guid id)
         {
-            var contact = await _webAPI.GetContactAsync(id);
+            var contact = await _webAPI.GetContactAsync(HttpContext, id);
             if (contact == null)
                 return RedirectToAction(nameof(Index));
             else
@@ -87,12 +87,11 @@ namespace Contacts.WebClient.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        //public ActionResult Create(IFormCollection collection)
         public async Task<ActionResult> Create(ContactModel contact)
         {
             try
             {
-                await _webAPI.CreateContact(contact);
+                await _webAPI.CreateContact(HttpContext, contact);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -106,7 +105,7 @@ namespace Contacts.WebClient.Controllers
         [Authorize]
         public async Task<ActionResult> Edit(Guid id)
         {
-            var contact = await _webAPI.GetContactAsync(id);
+            var contact = await _webAPI.GetContactAsync(HttpContext, id);
             if (contact == null)
                 return RedirectToAction(nameof(Index));
             else
@@ -121,7 +120,7 @@ namespace Contacts.WebClient.Controllers
         {
             try
             {
-                await _webAPI.UpdateContact(contact);
+                await _webAPI.UpdateContact(HttpContext, contact);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -135,7 +134,7 @@ namespace Contacts.WebClient.Controllers
         [Authorize]
         public async Task<ActionResult> Delete(Guid id)
         {
-            var contact = await _webAPI.GetContactAsync(id);
+            var contact = await _webAPI.GetContactAsync(HttpContext, id);
             if (contact == null)
                 return RedirectToAction(nameof(Index));
             else
@@ -150,7 +149,7 @@ namespace Contacts.WebClient.Controllers
         {
             try
             {
-                await _webAPI.DeleteContact(id);
+                await _webAPI.DeleteContact(HttpContext, id);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -175,7 +174,7 @@ namespace Contacts.WebClient.Controllers
         {
             try
             {
-                await _webAPI.ClearContacts();
+                await _webAPI.ClearContacts(HttpContext);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -201,9 +200,9 @@ namespace Contacts.WebClient.Controllers
             try
             {
                 if (model.Clear)
-                    await _webAPI.ClearContacts();
+                    await _webAPI.ClearContacts(HttpContext);
 
-                await _webAPI.GenerateContacts();
+                await _webAPI.GenerateContacts(HttpContext);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

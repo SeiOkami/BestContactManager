@@ -13,6 +13,7 @@ using Contacts.Application.Contacts.Commands.ClearContacts;
 using Contacts.Application.Contacts.Commands.GenerateContacts;
 using Contacts.Application.Contacts.Commands.ImportContacts;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 //using Contacts.WebApi.Models;
 
 namespace Contacts.WebApi.Controllers
@@ -50,8 +51,8 @@ namespace Contacts.WebApi.Controllers
         [Authorize]
         public async Task<ActionResult<ContactListVm>> GetAll()
         {
-            var name = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-
+            var name = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            //var afff = await HttpContext.AuthenticateAsync();
             var query = new GetContactListQuery
             {
                 UserId = UserId

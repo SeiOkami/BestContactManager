@@ -21,6 +21,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
+using IdentityServer4.Services;
 using IdentityServer4.EntityFramework.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,24 +30,26 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetValue<string>("DbConnection");
 var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
 
-builder.Services.AddDbContext<AuthDbContext>(options =>
+var services = builder.Services;
+
+
+services.AddDbContext<AuthDbContext>(options =>
 {
     options.UseSqlite(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly));
 });
 
-builder.Services.AddIdentity<AppUser, IdentityRole>(config =>
+
+services.AddIdentity<AppUser, IdentityRole>(config =>
 {
     config.Password.RequiredLength = 4;
     config.Password.RequireDigit = false;
     config.Password.RequireNonAlphanumeric = false;
     config.Password.RequireUppercase = false;
-    //config.Tokens.ProviderMap
 }).AddEntityFrameworkStores<AuthDbContext>().AddDefaultTokenProviders();
 
 
-builder.Services.AddIdentityServer()
-    .AddAspNetIdentity<AppUser>()
-    .AddConfigurationStore(options =>
+services.AddIdentityServer()
+    .AddAspNetIdentity<AppUser>().AddConfigurationStore(options =>
     {
         options.ConfigureDbContext = builder => builder.UseSqlite(connectionString,
            opt => opt.MigrationsAssembly(migrationsAssembly));
@@ -60,10 +63,10 @@ builder.Services.AddIdentityServer()
     })
     .AddDeveloperSigningCredential();
 
-builder.Services.AddControllersWithViews();
+
+services.AddControllersWithViews();
 
 
-//builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
@@ -87,5 +90,7 @@ app.UseIdentityServer();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
+
+
 
 app.Run();

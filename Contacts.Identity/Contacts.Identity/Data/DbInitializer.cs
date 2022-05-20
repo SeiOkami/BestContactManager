@@ -37,75 +37,42 @@ namespace Contacts.Identity.Data
                 EnsureSeedData(context);
             }
 
-            serviseScope.GetService<AuthDbContext>()?.Database.Migrate();
+            var authContext = serviseScope.GetService<AuthDbContext>();
+            authContext?.Database.Migrate();
+            SeedRoles(scope);
             EnsureUsers(scope);
         }
 
+        public static void SeedRoles(IServiceScope scope)           
+        {
+
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            if (roleManager.Roles.Any())
+                return;
+
+            roleManager.CreateAsync(new IdentityRole(Configuration.AdminRoleName));
+            roleManager.CreateAsync(new IdentityRole(Configuration.UserRoleName));
+            
+            Log.Debug("roles created");
+        }
 
         private static void EnsureUsers(IServiceScope scope)
         {
-            var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-            var alice = userMgr.FindByNameAsync("alice").Result;
-            if (alice == null)
-            {
-                alice = new AppUser
-                {
-                    UserName = "alice",
-                    Email = "AliceSmith@email.com",
-                    EmailConfirmed = true,
-                    Id = "20480835-FAA6-4495-8A7C-29E7CE175888",
-                };
-                var result = userMgr.CreateAsync(alice, "Pass123$").Result;
-                if (!result.Succeeded)
-                {
-                    throw new Exception(result.Errors.First().Description);
-                }
 
-                result = userMgr.AddClaimsAsync(alice, new Claim[]
-                {
-          new Claim(JwtClaimTypes.Name, "Alice Smith"),
-          new Claim(JwtClaimTypes.GivenName, "Alice"),
-          new Claim(JwtClaimTypes.FamilyName, "Smith"),
-          new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                }).Result;
-                if (!result.Succeeded)
-                {
-                    throw new Exception(result.Errors.First().Description);
-                }
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
 
-                Log.Debug("alice created");
-            }
+            if (userManager.Users.Any())
+                return;
+            
+            userManager.AddNewUserAsync("alice", "Alice Smith",
+                    "AliceSmith@email.com", "Pass123$", "20480835-FAA6-4495-8A7C-29E7CE175888").Wait();
 
-            var bob = userMgr.FindByNameAsync("bob").Result;
-            if (bob == null)
-            {
-                bob = new AppUser
-                {
-                    UserName = "bob",
-                    Email = "BobSmith@email.com",
-                    EmailConfirmed = true
-                };
-                var result = userMgr.CreateAsync(bob, "Pass123$").Result;
-                if (!result.Succeeded)
-                {
-                    throw new Exception(result.Errors.First().Description);
-                }
+            userManager.AddNewUserAsync("bob", "Bob Smith",
+                "BobSmith@email.com", "Pass123$", "ca257d10-1615-4b8e-92d8-38366ae805b0").Wait();
 
-                result = userMgr.AddClaimsAsync(bob, new Claim[]
-                {
-          new Claim(JwtClaimTypes.Name, "Bob Smith"),
-          new Claim(JwtClaimTypes.GivenName, "Bob"),
-          new Claim(JwtClaimTypes.FamilyName, "Smith"),
-          new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
-          new Claim("location", "somewhere")
-                }).Result;
-                if (!result.Succeeded)
-                {
-                    throw new Exception(result.Errors.First().Description);
-                }
+            Log.Debug("test users created");
 
-                Log.Debug("bob created");
-            }
         }
 
 
@@ -154,6 +121,8 @@ namespace Contacts.Identity.Data
 
                 context.SaveChanges();
             }
+                       
+
         }
 
     }

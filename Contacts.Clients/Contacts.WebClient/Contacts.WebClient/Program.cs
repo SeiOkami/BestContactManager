@@ -1,13 +1,13 @@
 using Contacts.WebClient.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.IdentityModel.Tokens.Jwt;
+using Contacts.WebClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
-var Configuration = builder.Configuration;
+var configuration = builder.Configuration;
 
-// Add services to the container.
 services.AddControllersWithViews();
 
 services.AddAuthentication(options =>
@@ -19,34 +19,32 @@ services.AddAuthentication(options =>
     .AddOpenIdConnect("oidc", options =>
     {
 
-        options.Authority = Configuration["InteractiveServiceSettings:AuthorityUrl"];
-        options.ClientId = Configuration["InteractiveServiceSettings:ClientId"];
-        options.ClientSecret = Configuration["InteractiveServiceSettings:ClientSecret"];
+        options.Authority = configuration["InteractiveServiceSettings:AuthorityUrl"];
+        options.ClientId = Configuration.ClientName;
+        options.ClientSecret = Configuration.SecretPassword;
 
         options.ResponseType = "code";
         options.UsePkce = true;
         options.ResponseMode = "query";
 
-        options.Scope.Add(Configuration["InteractiveServiceSettings:Scopes:0"]);
+        options.Scope.Add(Configuration.ApiScopeName);
+        
         options.SaveTokens = true;
-    });
 
-services.Configure<IdentityServerSettings>(Configuration.GetSection("IdentityServerSettings"));
+        options.TokenValidationParameters.RoleClaimType = "role";
+
+    });
 
 services.AddSingleton<ITokenService, TokenService>();
 services.AddSingleton<IWebAPIService, WebAPIService>();
-services.Configure<WebAPIServiceSettings>(Configuration.GetSection("SettingsWebAPI"));
+services.Configure<WebAPIServiceSettings>(configuration.GetSection("SettingsWebAPI"));
 
-//services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//.AddCookie();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -60,7 +58,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    //pattern: "{controller=Home}/{action=Test}/{id?}"
     pattern: "{controller=Contacts}/{action=Index}/{id?}"
     );
 

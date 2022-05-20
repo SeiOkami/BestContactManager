@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using Contacts.WebClient.Extensions
+
+@{
+    var name = Context.User?.GetDisplayName();
+    var auth = !String.IsNullOrEmpty(name);
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,20 +32,27 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Session">Session</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
                     </ul>
                 </div>
-                <a class="navbar-brand" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                @if (auth)
+                {
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link">@name</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" asp-action="Logout" asp-controller="Account">Logout</a>
+                        </li>
+                    </ul>
+                }
             </div>
         </nav>
     </header>
 
     @if (ViewBag.ErrorMessage != null)
-{
-    <h5 style="color:red">@ViewBag.ErrorMessage</h5>
-}
+    {
+        <h5 style="color:red">@ViewBag.ErrorMessage</h5>
+    }
 
     <div class="container">
         <main role="main" class="pb-3">

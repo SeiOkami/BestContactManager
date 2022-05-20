@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Contacts.WebClient.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Contacts.WebClient.Controllers
 {
@@ -20,7 +16,6 @@ namespace Contacts.WebClient.Controllers
         {
             return await Logout();
         }
-
 
         /// <summary>
         /// Handle logout page postback
@@ -38,9 +33,6 @@ namespace Contacts.WebClient.Controllers
 
             return Redirect("~/");
         }
-
-
-
     }
 
 }
