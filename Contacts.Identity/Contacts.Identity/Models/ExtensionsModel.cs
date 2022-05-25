@@ -32,8 +32,8 @@ namespace Contacts.Identity.Models
             thisResult = await userManager.AddClaimsAsync(user, 
                 new Claim[]{
                     new Claim(JwtClaimTypes.Name, fullName),
-                    new Claim(JwtClaimTypes.Id, user.Id),
-                    new Claim(JwtClaimTypes.Subject, user.Id)
+                    //new Claim(JwtClaimTypes.Id, user.Id),
+                    //new Claim(JwtClaimTypes.Subject, user.Id)
                 });
 
             if (!thisResult.Succeeded)

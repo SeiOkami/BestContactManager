@@ -23,6 +23,9 @@ using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using IdentityServer4.Services;
 using IdentityServer4.EntityFramework.DbContexts;
+using IdentityServer4.ResponseHandling;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using IdentityServer4.AspNetIdentity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,7 +65,6 @@ services.AddIdentityServer()
         options.EnableTokenCleanup = true;
     })
     .AddDeveloperSigningCredential();
-
 
 services.AddControllersWithViews();
 

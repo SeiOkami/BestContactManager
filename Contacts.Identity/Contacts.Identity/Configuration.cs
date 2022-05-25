@@ -11,12 +11,12 @@ namespace Contacts.Identity
     public static class Configuration
     {
 
-        public static readonly string UserRoleName    = "User";
-        public static readonly string AdminRoleName   = "Admin";
-        public static readonly string ApiScopeName    = "ContactsWebAPI";
-        public static readonly string ClientName      = "ContactsWebAPI";
+        public static readonly string UserRoleName = "User";
+        public static readonly string AdminRoleName = "Admin";
+        public static readonly string ApiScopeName = "ContactsWebAPI";
+        public static readonly string ClientName = "ContactsWebAPI";
         public static readonly string ApiResourceName = "ContactsWebAPI";
-        public static readonly string SecretPassword  = "AFD9AF9D-03E1-4F54-9E57-44B334A11B78";
+        public static readonly string SecretPassword = "AFD9AF9D-03E1-4F54-9E57-44B334A11B78";
 
         public static IEnumerable<ApiScope> ApiScopes =>
             new List<ApiScope>
@@ -49,7 +49,7 @@ namespace Contacts.Identity
                 new ApiResource(ApiResourceName)
                 {
                     Scopes = {
-                        ApiScopeName, 
+                        ApiScopeName,
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile
                     },
@@ -63,7 +63,7 @@ namespace Contacts.Identity
                 {
                     ClientId = ClientName,
                     ClientName = ClientName,
-                    
+
                     ClientSecrets = { new Secret(SecretPassword.Sha256()) },
                     AllowedGrantTypes =
                     {
@@ -85,9 +85,45 @@ namespace Contacts.Identity
                         ApiScopeName
                     },
                     AllowAccessTokensViaBrowser = true
+                },
+
+                new Client()
+                {
+
+                    ClientId = "WPF",
+                    ClientName = "WPF",
+
+                    AllowedCorsOrigins = { "https://localhost" },
+
+                    RedirectUris = { "https://localhost/sigin-wpf-app-oidc" },
+                    PostLogoutRedirectUris = { "https://localhost/signout-wpf-app-oidc" },
+                    RequireClientSecret = true,
+                    RequireConsent = false,
+                    ClientSecrets = { new Secret(SecretPassword.Sha256()) },
+                    //AllowedGrantTypes =
+                    //{
+                    //    GrantType.AuthorizationCode,
+                    //    GrantType.ClientCredentials
+                    //},
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,                    
+                    //AllowedGrantTypes = GrantTypes.Code,
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        //IdentityServerConstants.StandardScopes.OfflineAccess,
+                        ApiScopeName
+                    },
+                    AlwaysIncludeUserClaimsInIdToken = true,
+                    //IdentityTokenLifetime=3600,
+                    AllowOfflineAccess = true,
+                    AllowAccessTokensViaBrowser = true
                 }
+
+
             };
-        
+
     }
 
 }

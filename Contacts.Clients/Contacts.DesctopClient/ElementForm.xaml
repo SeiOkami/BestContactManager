@@ -1,0 +1,122 @@
+﻿<Window x:Class="Contacts.DesctopClient.ElementForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Contacts.DesctopClient"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Title="{Binding FirstName}" SizeToContent="WidthAndHeight">
+
+    <Window.Resources>
+        <ResourceDictionary Source="Styles.xaml" />
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Command="Close" Key="Esc" Modifiers=""/>
+    </Window.InputBindings>
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="CloseExecuted"/>
+    </Window.CommandBindings>
+
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="150"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+
+        <Grid x:Name="FieldsGrid" Grid.Row="0" Grid.ColumnSpan="2">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="150"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="First Name"/>
+            <TextBox Grid.Row="0" Grid.Column="1">
+                <TextBox.Text>
+                    <Binding Path="FirstName">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Middle Name"/>
+            <TextBox Grid.Row="1" Grid.Column="1">
+                <TextBox.Text>
+                    <Binding Path="MiddleName">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Last Name"/>
+            <TextBox Grid.Row="2" Grid.Column="1">
+                <TextBox.Text>
+                    <Binding Path="LastName">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Phone"/>
+            <TextBox Grid.Row="3" Grid.Column="1">
+                <TextBox.Text>
+                    <Binding Path="Phone">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Email"/>
+            <TextBox Grid.Row="4" Grid.Column="1">
+                <TextBox.Text>
+                    <Binding Path="Email">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+            <TextBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+                <TextBox.Text>
+                    <Binding Path="Description">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+
+        </Grid>
+
+        <Button Content="Save" Grid.Row="1" Grid.Column="0" Click="Ok_Click"/>
+        <Button Content="Cancel" Grid.Row="1" Grid.Column="1" Click="Cancel_Click"/>
+
+    </Grid>
+</Window>

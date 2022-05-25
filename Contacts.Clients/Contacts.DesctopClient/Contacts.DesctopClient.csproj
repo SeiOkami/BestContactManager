@@ -1,0 +1,95 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="ViewModels\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="appsettings.json" />
+		<None Remove="Resources\Add.ico" />
+		<None Remove="Resources\Close.ico" />
+		<None Remove="Resources\Delete.ico" />
+		<None Remove="Resources\Edit.ico" />
+		<None Remove="Resources\Generate.ico" />
+		<None Remove="Resources\Open.ico" />
+		<None Remove="Resources\Save.ico" />
+		<None Remove="Resources\Log.ico" />
+		<None Remove="Resources\Transfer.ico" />
+		<None Remove="Resources\Settings.ico" />
+		<None Remove="Resources\Update.ico" />
+		<None Remove="Resources\Filter.ico" />
+		<None Remove="Resources\Profile.ico" />
+		<None Remove="Resources\Logout.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="IdentityModel.OidcClient" Version="5.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+	  <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1210.39" />
+	  <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	  <PackageReference Include="System.Memory.Data" Version="6.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Resources\Add.ico" />
+		<Resource Include="Resources\Close.ico" />
+		<Resource Include="Resources\Delete.ico" />
+		<Resource Include="Resources\Edit.ico" />
+		<Resource Include="Resources\Generate.ico" />
+		<Resource Include="Resources\Open.ico" />
+		<Resource Include="Resources\Save.ico" />
+		<Resource Include="Resources\Log.ico" />
+		<Resource Include="Resources\Transfer.ico" />
+		<Resource Include="Resources\Settings.ico" />
+		<Resource Include="Resources\Update.ico" />
+		<Resource Include="Resources\Filter.ico" />
+		<Resource Include="Resources\Profile.ico" />
+		<Resource Include="Resources\Logout.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Properties\Resources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+		<Compile Update="Properties\Settings.Designer.cs">
+		  <DesignTimeSharedInput>True</DesignTimeSharedInput>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>Settings.settings</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Properties\Resources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Properties\Settings.settings">
+	    <Generator>SettingsSingleFileGenerator</Generator>
+	    <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+	  </None>
+	</ItemGroup>
+
+</Project>
