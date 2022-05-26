@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace Contacts.DesctopClient.Commands
+namespace Contacts.DesctopClient.ViewModels
 {
     public class RelayCommand : ICommand
     {
@@ -20,35 +20,35 @@ namespace Contacts.DesctopClient.Commands
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public RelayCommand(Action<object?> executeMethodParam, 
+        public RelayCommand(Action<object?> executeMethodParam,
             Func<object?, bool>? canExecuteMethodParam = null, string? textQuetion = null)
         {
-            this.ExecuteMethodParam = executeMethodParam;
-            this.CanExecuteMethodParam = canExecuteMethodParam;
-            this.TextQuestion = textQuetion;
+            ExecuteMethodParam = executeMethodParam;
+            CanExecuteMethodParam = canExecuteMethodParam;
+            TextQuestion = textQuetion;
         }
         public RelayCommand(Action executeMethod, Func<bool>? canExecuteMethod = null, string? textQuetion = null)
         {
-            this.ExecuteMethod = executeMethod;
-            this.CanExecuteMethod = canExecuteMethod;
-            this.TextQuestion = textQuetion;
+            ExecuteMethod = executeMethod;
+            CanExecuteMethod = canExecuteMethod;
+            TextQuestion = textQuetion;
         }
 
         public bool CanExecute(object? parameter)
         {
             if (CanExecuteMethodParam != null)
-                return this.CanExecuteMethodParam(parameter);
+                return CanExecuteMethodParam(parameter);
             else if (CanExecuteMethod != null)
-                return this.CanExecuteMethod();
+                return CanExecuteMethod();
             else
                 return true;
         }
 
         public void Execute(object? parameter)
         {
-            if (!String.IsNullOrEmpty(TextQuestion))
+            if (!string.IsNullOrEmpty(TextQuestion))
             {
-                var answer = MessageBox.Show(TextQuestion, "", 
+                var answer = MessageBox.Show(TextQuestion, "",
                     MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 if (answer != MessageBoxResult.Yes)
@@ -56,9 +56,9 @@ namespace Contacts.DesctopClient.Commands
             }
 
             if (ExecuteMethodParam != null)
-                this.ExecuteMethodParam(parameter);
+                ExecuteMethodParam(parameter);
             else if (ExecuteMethod != null)
-                this.ExecuteMethod();
+                ExecuteMethod();
         }
     }
 }

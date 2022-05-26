@@ -8,10 +8,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Folder Include="ViewModels\" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Remove="appsettings.json" />
 		<None Remove="Resources\Add.ico" />
 		<None Remove="Resources\Close.ico" />

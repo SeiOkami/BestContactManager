@@ -15,9 +15,7 @@ using System.Windows.Shapes;
 
 namespace Contacts.DesctopClient
 {
-    /// <summary>
-    /// Логика взаимодействия для ClientForm.xaml
-    /// </summary>
+    
     public partial class ElementForm : Window
     {
 
@@ -30,11 +28,7 @@ namespace Contacts.DesctopClient
                 return !String.IsNullOrWhiteSpace(element.FirstName);
             }
         }
-
-        /// <summary>
-        /// Основной конструктор
-        /// </summary>
-        /// <param name="element">Элемент</param>
+        
         public ElementForm(ContactModel element)
         {
             InitializeComponent();
@@ -42,12 +36,7 @@ namespace Contacts.DesctopClient
             this.element = element;
             DataContext = element;
         }
-
-        /// <summary>
-        /// Применение изменений
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        
         private void Ok_Click(object sender, RoutedEventArgs e)
         {
             if (!isCorrect)
@@ -55,22 +44,12 @@ namespace Contacts.DesctopClient
             else
                 this.DialogResult = true;
         }
-
-        /// <summary>
-        /// Отмена изменений
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
         }
-
-        /// <summary>
-        /// Отмена (при нажатии Esc)
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        
         private void CloseExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             this.DialogResult = false;

@@ -21,9 +21,9 @@ namespace Contacts.DesctopClient.Identity
     {
 
         private OidcClient oidcClient;
-        
+
         public UserModel User;
-        
+
         private readonly string userCancelKeyError = "UserCancel";
         private readonly string accessDeniedKeyError = "access_denied";
         private readonly WebAPISettings settings;
@@ -42,9 +42,11 @@ namespace Contacts.DesctopClient.Identity
 
             settings = config.GetSection("SettingsWebAPI").Get<WebAPISettings>();
 
+            var identitySettings = config.GetSection("InteractiveServiceSettings").Get<IdentityServerSettings>();
+
             var options = new OidcClientOptions()
             {
-                Authority = "https://localhost:7251",
+                Authority = identitySettings.AuthorityUrl,
                 ClientId = "WPF",
                 ClientSecret = "AFD9AF9D-03E1-4F54-9E57-44B334A11B78",
                 Scope = "openid profile ContactsWebAPI",
@@ -54,7 +56,6 @@ namespace Contacts.DesctopClient.Identity
             };
 
             oidcClient = new OidcClient(options);
-
         }
 
         public async Task LoginAsync()
@@ -68,7 +69,7 @@ namespace Contacts.DesctopClient.Identity
             try
             {
                 var result = await oidcClient.LoginAsync();
-                
+
                 User.Token = result.AccessToken;
                 User.Name = result.User?.Identity?.Name;
                 User.IsAuthenticated = result.User?.Identity?.IsAuthenticated ?? false;
@@ -79,8 +80,8 @@ namespace Contacts.DesctopClient.Identity
                 throw;
             }
 
-            if (error != null 
-                && error != userCancelKeyError 
+            if (error != null
+                && error != userCancelKeyError
                 && error != accessDeniedKeyError)
                 MessageBox.Show(error);
 
@@ -92,13 +93,13 @@ namespace Contacts.DesctopClient.Identity
             using var httpClient = new HttpClientAPI(User.Token);
 
             var response = await httpClient.GetAsync(settings.ListMethodURL);
-            
+
             if (response.IsSuccessStatusCode)
                 return (ContactsModel?)(await response.Content.ReadFromJsonAsync(typeof(ContactsModel)));
-            
+
             HandleResponseError(response);
             return null;
-                
+
         }
 
         public async Task<ContactModel?> GetContactAsync(Guid ID)
@@ -128,6 +129,7 @@ namespace Contacts.DesctopClient.Identity
             if (!response.IsSuccessStatusCode)
                 HandleResponseError(response);
         }
+
         public async Task<Guid?> CreateContactAsync(ContactModel contact)
         {
             using var httpClient = new HttpClientAPI(User.Token);
@@ -158,7 +160,6 @@ namespace Contacts.DesctopClient.Identity
             return false;
         }
 
-
         public async Task<Stream?> ExportContacts()
         {
             using var httpClient = new HttpClientAPI(User.Token);
@@ -170,7 +171,6 @@ namespace Contacts.DesctopClient.Identity
             HandleResponseError(response);
             return null;
         }
-
 
         public async Task ClearContactsAsync()
         {
@@ -195,13 +195,6 @@ namespace Contacts.DesctopClient.Identity
         public async Task ImportContacts(string data)
         {
 
-            //var contacts = new StringBuilder();
-            //using (var reader = new StreamReader(model.FileContacts.OpenReadStream()))
-            //{
-            //    while (reader.Peek() >= 0)
-            //        contacts.AppendLine(await reader.ReadLineAsync());
-            //}
-
             using var httpClient = new HttpClientAPI(User.Token);
 
             var content = new StringContent(data, Encoding.UTF8, "application/json");
@@ -220,7 +213,6 @@ namespace Contacts.DesctopClient.Identity
 
             User.Name = String.Empty;
         }
-
 
         public void HandleResponseError(HttpResponseMessage response)
         {

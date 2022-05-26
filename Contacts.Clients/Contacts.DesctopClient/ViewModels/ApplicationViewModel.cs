@@ -1,5 +1,4 @@
-﻿using Contacts.DesctopClient.Commands;
-using Contacts.DesctopClient.Identity;
+﻿using Contacts.DesctopClient.Identity;
 using Contacts.DesctopClient.Models;
 using Microsoft.Win32;
 using System;
@@ -140,13 +139,12 @@ namespace Contacts.DesctopClient.ViewModels
                 {
                     newContacts = (await WebAPI.ListContactsAsync())?.Contacts;
                 }
-                catch (Exception ex)
+                catch
                 {
 
                 }
                 
-            }
-                
+            }                
             
             Contacts = newContacts ?? new();
         }
@@ -209,7 +207,6 @@ namespace Contacts.DesctopClient.ViewModels
 
             UpdateCommandExecute();
         }
-
         public async void ClearCommandExecute()
         {
             

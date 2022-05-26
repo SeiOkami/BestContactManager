@@ -9,7 +9,7 @@ namespace Contacts.DesctopClient.Identity
 {
     public class IdentityBrowser : IBrowser
     {
-        private BrowserOptions _options = null;
+        private BrowserOptions? _options;
 
         public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken = default)
         {
@@ -70,7 +70,7 @@ namespace Contacts.DesctopClient.Identity
 
         private bool IsBrowserNavigatingToRedirectUri(Uri uri)
         {
-            return uri.AbsoluteUri.StartsWith(_options.EndUrl);
+            return _options != null && uri.AbsoluteUri.StartsWith(_options.EndUrl);
         }
     }
 }
