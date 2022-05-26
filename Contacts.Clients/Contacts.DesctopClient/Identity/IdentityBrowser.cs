@@ -23,8 +23,8 @@ namespace Contacts.DesctopClient.Identity
 
             var signinWindow = new Window()
             {
-                Width = 800,
-                Height = 600,
+                Width = 560,
+                Height = 890,
                 Title = "Sign In",
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };

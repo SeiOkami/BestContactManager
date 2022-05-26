@@ -25,6 +25,7 @@ namespace Contacts.DesctopClient.Identity
         public UserModel User;
         
         private readonly string userCancelKeyError = "UserCancel";
+        private readonly string accessDeniedKeyError = "access_denied";
         private readonly WebAPISettings settings;
 
         public WebAPI()
@@ -78,7 +79,9 @@ namespace Contacts.DesctopClient.Identity
                 throw;
             }
 
-            if (error != null && error != userCancelKeyError)
+            if (error != null 
+                && error != userCancelKeyError 
+                && error != accessDeniedKeyError)
                 MessageBox.Show(error);
 
             User.InProcessAuthenticated = false;
