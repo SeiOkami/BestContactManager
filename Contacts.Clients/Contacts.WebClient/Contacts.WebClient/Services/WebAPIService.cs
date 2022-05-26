@@ -21,14 +21,15 @@ namespace Contacts.WebClient.Services
 
         public async Task<ContactsModel?> ListContacts(HttpContext сontext)
         {
-
+            
             using var httpClient = await NewHttpClient(сontext);
 
             var result = await httpClient.GetAsync(Settings.ListMethodURL);
             if (result.IsSuccessStatusCode)
                 return (ContactsModel?)(await result.Content.ReadFromJsonAsync(typeof(ContactsModel)));
             else
-                throw new Exception(result.ToString());
+                throw new Exception(result.ToString());            
+
         }
 
         public async Task<Stream> ExportContacts(HttpContext сontext)

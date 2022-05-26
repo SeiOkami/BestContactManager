@@ -12,8 +12,8 @@ namespace Contacts.WebApi.Models
         public void Mapping(Profile profile)
         {
             profile.CreateMap<ImportContactsDto, ImportContactsCommand>()
-                .ForMember(noteCommand => noteCommand.Contacts,
-                    opt => opt.MapFrom(noteDto => noteDto.Contacts)).ReverseMap();
+                .ForMember(command => command.Contacts,
+                    opt => opt.MapFrom(dto => dto.Contacts)).ReverseMap();
         }
     }
 }

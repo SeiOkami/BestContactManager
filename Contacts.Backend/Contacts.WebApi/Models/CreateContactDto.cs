@@ -23,18 +23,18 @@ namespace Contacts.WebApi.Models
         public void Mapping(Profile profile)
         {
             profile.CreateMap<CreateContactDto, CreateContactCommand>()
-                .ForMember(noteCommand => noteCommand.FirstName,
-                    opt => opt.MapFrom(noteDto => noteDto.FirstName))
-                .ForMember(noteCommand => noteCommand.LastName,
-                    opt => opt.MapFrom(noteDto => noteDto.LastName))
-                .ForMember(noteCommand => noteCommand.MiddleName,
-                    opt => opt.MapFrom(noteDto => noteDto.MiddleName))
-                .ForMember(noteCommand => noteCommand.Phone,
-                    opt => opt.MapFrom(noteDto => noteDto.Phone))
-                .ForMember(noteCommand => noteCommand.Email,
-                    opt => opt.MapFrom(noteDto => noteDto.Email))
-                .ForMember(noteCommand => noteCommand.Description,
-                    opt => opt.MapFrom(noteDto => noteDto.Description));
+                .ForMember(command => command.FirstName,
+                    opt => opt.MapFrom(dto => dto.FirstName))
+                .ForMember(command => command.LastName,
+                    opt => opt.MapFrom(dto => dto.LastName))
+                .ForMember(command => command.MiddleName,
+                    opt => opt.MapFrom(dto => dto.MiddleName))
+                .ForMember(command => command.Phone,
+                    opt => opt.MapFrom(dto => dto.Phone))
+                .ForMember(command => command.Email,
+                    opt => opt.MapFrom(dto => dto.Email))
+                .ForMember(command => command.Description,
+                    opt => opt.MapFrom(dto => dto.Description));
         }
     }
 }

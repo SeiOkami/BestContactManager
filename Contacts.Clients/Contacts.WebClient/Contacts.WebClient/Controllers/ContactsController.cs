@@ -27,8 +27,16 @@ namespace Contacts.WebClient.Controllers
         [Authorize]
         public async Task<ActionResult> Index()
         {
-            var contacts = await _webAPI.ListContacts(HttpContext);
-            return View(contacts);
+            //ContactsModel? contacts;
+            try
+            {
+                var contacts = await _webAPI.ListContacts(HttpContext);
+                return View(contacts);
+            }
+            catch
+            {
+                return RedirectToAction("Logout", "Account");
+            }
         }
 
         [Authorize]

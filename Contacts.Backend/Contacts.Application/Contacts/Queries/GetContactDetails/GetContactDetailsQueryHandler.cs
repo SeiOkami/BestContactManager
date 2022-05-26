@@ -24,10 +24,11 @@ namespace Contacts.Application.Contacts.Queries.GetContactDetails
             CancellationToken cancellationToken)
         {
             var contact = await _dbContext.Contacts
-                .FirstOrDefaultAsync(el =>
-                el.Id == request.Id, cancellationToken);
+                .FirstOrDefaultAsync(
+                el => (el.UserId == request.UserId && el.Id == request.Id)
+                , cancellationToken);
 
-            if (contact == null || contact.UserId != request.UserId)
+            if (contact == null)
                 throw new NotFoundException(nameof(Contact), request.Id);
 
             return _mapper.Map<ContactDetailsVm>(contact);

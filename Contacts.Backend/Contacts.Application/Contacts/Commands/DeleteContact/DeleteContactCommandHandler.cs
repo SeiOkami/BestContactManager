@@ -19,9 +19,10 @@ namespace Contacts.Application.Contacts.Commands.DeleteContact
         {
             
             var contact = await _dbContext.Contacts.FindAsync(
-                new object[] { request.Id }, cancellationToken);
+                new object[] { request.UserId, request.Id }
+                , cancellationToken);
 
-            if (contact == null || contact.UserId != request.UserId)
+            if (contact == null)
                 throw new NotFoundException(nameof(Contact), request.Id);
 
             _dbContext.Contacts.Remove(contact);
