@@ -192,26 +192,26 @@ namespace Contacts.DesctopClient.Identity
                 HandleResponseError(response);
         }
 
-        //public async Task ImportContacts(ImportContactsModel model)
-        //{
+        public async Task ImportContacts(string data)
+        {
 
-        //    var contacts = new StringBuilder();
-        //    using (var reader = new StreamReader(model.FileContacts.OpenReadStream()))
-        //    {
-        //        while (reader.Peek() >= 0)
-        //            contacts.AppendLine(await reader.ReadLineAsync());
-        //    }
+            //var contacts = new StringBuilder();
+            //using (var reader = new StreamReader(model.FileContacts.OpenReadStream()))
+            //{
+            //    while (reader.Peek() >= 0)
+            //        contacts.AppendLine(await reader.ReadLineAsync());
+            //}
 
-        //    using var httpClient = await NewHttpClient(сontext);
+            using var httpClient = new HttpClientAPI(User.Token);
 
-        //    var content = new StringContent(contacts.ToString(), Encoding.UTF8, "application/json");
+            var content = new StringContent(data, Encoding.UTF8, "application/json");
 
-        //    var result = await httpClient.PostAsync(Settings.ImportMethodURL, content);
+            var response = await httpClient.PostAsync(settings.ImportMethodURL, content);
 
-        //    if (!result.IsSuccessStatusCode)
-        //        throw new Exception(result.ToString());
+            if (!response.IsSuccessStatusCode)
+                HandleResponseError(response);
 
-        //}
+        }
 
         public void Logout()
         {

@@ -1,10 +1,12 @@
 ﻿using Contacts.DesctopClient.Commands;
 using Contacts.DesctopClient.Identity;
 using Contacts.DesctopClient.Models;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -161,11 +163,37 @@ namespace Contacts.DesctopClient.ViewModels
 
         public async void ImportCommandExecute()
         {
+            FileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = $"(*.json) | *.json;";
+            if (fileDialog.ShowDialog() != true)
+                return;
+
+            var path = fileDialog.FileName;
+            if (!File.Exists(path))
+                return;
+
+            string readText = File.ReadAllText(path);
             
+            await WebAPI.ImportContacts(readText);
+
+            UpdateCommandExecute();
+
         }
 
         public async void ExportCommandExecute()
-        {
+        {            
+            FileDialog fileDialog = new SaveFileDialog();
+            fileDialog.Filter = $"(*.json) | *.json;";
+            if (fileDialog.ShowDialog() != true)
+                return;
+            
+            var result = await WebAPI.ExportContacts();
+            if (result == null)
+                return;
+            
+            string path = Path.Combine(fileDialog.FileName);
+            using (FileStream outputFileStream = new FileStream(path, FileMode.Create))
+                result.CopyTo(outputFileStream);
 
         }
         public async void GenerateCommandExecute()
